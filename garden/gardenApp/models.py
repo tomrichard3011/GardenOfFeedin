@@ -8,7 +8,10 @@ class PublicUser(models.Model):
     email = models.EmailField()
     username = models.CharField(max_length=256)
     pass_hash = models.CharField(max_length=256)
-    address = models.CharField(max_length=256)
+    #address = models.CharField(max_length=256)
+
+    def __repr__(self):
+        return str(self.__dict__)
 
 
 class CorpUser(models.Model):
