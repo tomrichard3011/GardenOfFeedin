@@ -30,7 +30,7 @@ def test_make(request):
         'username':new.username,
         'pass_hash':new.pass_hash
     }
-    return render(request,'test/display.html',context)
+    return render(request,'test/testdisplay.html',context)
 
 
 def test_authenticate(request):
