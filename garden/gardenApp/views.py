@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from gardenApp.models import PublicUser
 from django.contrib.auth import authenticate
 from django.contrib.auth.backends import BaseBackend
-#import bcrypt #later for password hash
+from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
 
 def test_home(request):
     return render(request, 'test/testhome.html', {})
@@ -19,6 +19,16 @@ def test_make(request):
     username = request.POST.get("username")
     pw = request.POST.get("password")
     email = request.POST.get("email")
+
+    # hash password
+    # TODO randomly generate a hash
+    pw = PBKDF2PasswordHasher.encode(
+        self=PBKDF2PasswordHasher,
+        password=pw,
+        salt=username
+    )
+
+
 
     #create user
     new = PublicUser.objects.create(email=email,username=username,pass_hash=pw)
@@ -38,14 +48,21 @@ def test_authenticate(request):
     pw = request.POST.get("password")
 
     #DEBUG print parameters 
-    print('{} {}'.format(username,pw))
+    print('{} {}'.format(username, pw))
 
     #Only checks if user exists with given parameters
     #Need to implement TOKEN verification, as well as model based authentication
     try:
-        user = PublicUser.objects.get(username=username,pass_hash=pw)
-        if user is not None:
+        #TODO should use email instead of username to login
+        #TODO Test pass authentication
+        user = PublicUser.objects.get(username=username) #,pass_hash=pw)
+        valid = check_password(pw, user.pass_hash)
+
+        if valid:
             return HttpResponse("<h1>{} IS LEGIT</h1><br><a href='/'>HOME</a>".format(user.username))
+        else:
+            # TODO bad login credential response
+            return HttpResponse("<h1>NOT LEGIT</h1><br><a href='/'>HOME</a>")
     except: 
         return HttpResponse("<h1>NOT LEGIT</h1><br><a href='/'>HOME</a>")
 
