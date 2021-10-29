@@ -4,6 +4,7 @@ from gardenApp.models import PublicUser
 from django.contrib.auth import authenticate
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
+import secrets
 
 def test_home(request):
     return render(request, 'test/testhome.html', {})
@@ -21,11 +22,12 @@ def test_make(request):
     email = request.POST.get("email")
 
     # hash password
-    # TODO randomly generate a hash
+    # random salt generation - 32 bytes should be secure enough
+    uniqueSalt = secrets.token_urlsafe(32)
     pw = PBKDF2PasswordHasher.encode(
         self=PBKDF2PasswordHasher,
         password=pw,
-        salt=username
+        salt=uniqueSalt
     )
 
 
@@ -54,7 +56,8 @@ def test_authenticate(request):
     #Need to implement TOKEN verification, as well as model based authentication
     try:
         #TODO should use email instead of username to login
-        #TODO Test pass authentication
+        #TODO TEST pass authentication
+        #NOTE need to set environment variable: DJANGO_SETTINGS_MODULE=garden.garden.settings
         user = PublicUser.objects.get(username=username) #,pass_hash=pw)
         valid = check_password(pw, user.pass_hash)
 
