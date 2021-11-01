@@ -1,0 +1,72 @@
+/* SIGN IN */
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-signin .checkbox {
+  font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* REGISTER */
+.form-register {
+  width: 100%;
+  max-width: 1530px;	/* 330 */
+  padding: 15px;
+  margin: auto;
+}
+
+.form-register .form-check {
+  font-weight: 400;
+}
+
+.form-register .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-register input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-register input[type="password"] {
+  margin-bottom: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.form-register input[type="text"] {
+  margin-bottom: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* FOOTER */
+.page-footer {
+    background-color: #222;
+    color: #ccc;
+    padding: 80px 0 30px;
+}
+.footer-copyright {
+    color: #666;
+    padding: 40px 0;
+}
