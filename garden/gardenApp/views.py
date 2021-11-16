@@ -32,16 +32,25 @@ def createUser(request):
     new = PublicUser.objects.create(email=email,username=username,pass_hash=pw,address=address)
     new.save()
 
+    # context = {
+    #     #'id':new.id,
+    #     #'email':new.email,
+    #     'username':new.username,
+    #     #'pass_hash':new.pass_hash,
+    #     #'address':new.address,
+    # }
+    request.session['id'] = new.id
+    response = redirect('/landing')
+    return response
+    # return render(request,'landing.html',context)
+
+def landing(request):
+    id = request.session['id']
+    user = PublicUser.objects.get(id=id)
     context = {
-        #'id':new.id,
-        #'email':new.email,
-        'username':new.username,
-        #'pass_hash':new.pass_hash,
-        #'address':new.address,
+        'username':user.username,
     }
-
-    return render(request,'landing.html',context)
-
+    return render(request,'landing.html', context)
 
 # TEST METHODS
 def test_home(request):
