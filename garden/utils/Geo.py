@@ -7,10 +7,9 @@ geolocator = Nominatim(user_agent="GardenOfFeedin")
 def addressToCoordinates(address):
     location = geolocator.geocode(address)
     if location is None: # invalid address
-        raise Exception
+        raise Exception("Invalid or Nonexistent address given")
 
     return location
-
 
 def coordinateDistance(coord1, coord2):
     return geodesic(coord1, coord2).mi
