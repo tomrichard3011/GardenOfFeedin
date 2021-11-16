@@ -69,7 +69,7 @@ def test_make(request):
     )
 
     #create user
-    new = PublicUser.objects.create(email=email,username=username,pass_hash=pw)
+    new = PublicUser.objects.create(email=email, username=username, pass_hash=pw)
     new.save()
 
     context = {
@@ -105,3 +105,11 @@ def test_authenticate(request):
     except: 
         return HttpResponse("<h1>NOT LEGIT</h1><br><a href='/'>HOME</a>")
 
+# returns true if email and password for user are valid
+def userLoginAuthentication(email, password):
+    user = PublicUser.objects.get(email=email)
+    # NOTE need to set environment variable: DJANGO_SETTINGS_MODULE=garden.garden.settings
+    if user is None:
+        raise Exception("No such user")
+
+    return check_password(password, user.pass_hash)
