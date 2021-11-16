@@ -7,6 +7,7 @@ from django.conf import settings
 urlpatterns = [
     path('', views.home, name='home'),
     path('signup', views.signup, name='signup'),
+    path('createuser', views.createUser, name='createuser'),
     # TEST URLS
     path('testhome', views.test_home, name='testhome'),
     path('testlogin', views.test_login, name='testlogin'),

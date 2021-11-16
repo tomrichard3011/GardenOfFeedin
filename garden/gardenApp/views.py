@@ -16,6 +16,7 @@ def createUser(request):
     #get post request data
     username = request.POST.get("username")
     pw = request.POST.get("password")
+    address = request.POST.get("address")
     email = request.POST.get("email")
 
     # hash password
@@ -28,14 +29,15 @@ def createUser(request):
     )
 
     #create user
-    new = PublicUser.objects.create(email=email,username=username,pass_hash=pw)
+    new = PublicUser.objects.create(email=email,username=username,pass_hash=pw,address=address)
     new.save()
 
     context = {
         'id':new.id,
         'email':new.email,
         'username':new.username,
-        'pass_hash':new.pass_hash
+        'pass_hash':new.pass_hash,
+        'address':new.address,
     }
     return render(request,'test/testdisplay.html',context)
 
