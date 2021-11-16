@@ -127,6 +127,16 @@ body {
     padding: 40px 0;
 }
 
+/* WELCOME */
+.welcome {
+	text-align: center;
+	padding: 2px 0;
+}
+.welcome h3{
+	color:#E7F3E1;
+}
+
+
 /* SEARCH FORM */
 .form-group {
 	margin-top: 16px;
