@@ -33,13 +33,14 @@ def createUser(request):
     new.save()
 
     context = {
-        'id':new.id,
-        'email':new.email,
+        #'id':new.id,
+        #'email':new.email,
         'username':new.username,
-        'pass_hash':new.pass_hash,
-        'address':new.address,
+        #'pass_hash':new.pass_hash,
+        #'address':new.address,
     }
-    return render(request,'test/testdisplay.html',context)
+
+    return render(request,'landing.html',context)
 
 
 # TEST METHODS
