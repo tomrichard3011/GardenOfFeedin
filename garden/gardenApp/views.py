@@ -6,6 +6,44 @@ from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
 import secrets
 
+def home(request):
+    return render(request, 'homepage.html')
+
+def signup(request):
+    return render(request, 'register.html')
+
+def createUser(request):
+    #get post request data
+    username = request.POST.get("username")
+    pw = request.POST.get("password")
+    address = request.POST.get("address")
+    email = request.POST.get("email")
+
+    # hash password
+    # random salt generation - 32 bytes should be secure enough
+    uniqueSalt = secrets.token_urlsafe(32)
+    pw = PBKDF2PasswordHasher.encode(
+        self=PBKDF2PasswordHasher,
+        password=pw,
+        salt=uniqueSalt
+    )
+
+    #create user
+    new = PublicUser.objects.create(email=email,username=username,pass_hash=pw,address=address)
+    new.save()
+
+    context = {
+        #'id':new.id,
+        #'email':new.email,
+        'username':new.username,
+        #'pass_hash':new.pass_hash,
+        #'address':new.address,
+    }
+
+    return render(request,'landing.html',context)
+
+
+# TEST METHODS
 def test_home(request):
     return render(request, 'test/testhome.html', {})
 
@@ -29,8 +67,6 @@ def test_make(request):
         password=pw,
         salt=uniqueSalt
     )
-
-
 
     #create user
     new = PublicUser.objects.create(email=email, username=username, pass_hash=pw)
