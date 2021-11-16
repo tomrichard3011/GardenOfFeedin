@@ -39,13 +39,13 @@ def createUser(request):
     #     #'pass_hash':new.pass_hash,
     #     #'address':new.address,
     # }
-    request.session['id'] = new.id
+    request.session['idx'] = new.id
     response = redirect('/landing')
     return response
     # return render(request,'landing.html',context)
 
 def landing(request):
-    id = request.session['id']
+    id = request.session['idx']
     user = PublicUser.objects.get(id=id)
     context = {
         'username':user.username,
@@ -57,13 +57,12 @@ def signin(request):
 
 def signout(request):
     try:
-        del request.session['id']
+        del request.session['idx']
         response = redirect('/')
         return response
     except:
         pass
     #TODO Handle hack3rs
-
 
 # returns true if email and password for user are valid
 def userLoginAuthentication(email, password):
@@ -78,7 +77,7 @@ def authenticate(request):
     pw = request.POST.get("password")
     if(userLoginAuthentication(email,pw)):
         user = PublicUser.objects.get(email=email)
-        request.session['id'] = user.id
+        request.session['idx'] = user.id
         response = redirect('/landing')
         return response
     response = redirect('/signin')

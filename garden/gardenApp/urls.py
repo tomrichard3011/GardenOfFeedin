@@ -10,7 +10,7 @@ urlpatterns = [
     path('createuser', views.createUser, name='createuser'),
     path('landing', views.landing, name='landing'),
     path('signin', views.signin, name='signin'),
-    path('authenticate', views.userLoginAuthentication, name='authenticate'),
+    path('authenticate', views.authenticate, name='authenticate'),
     path('signout', views.signout, name='signout'),
     # TEST URLS
     path('testhome', views.test_home, name='testhome'),
