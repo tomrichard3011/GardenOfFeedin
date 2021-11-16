@@ -7,9 +7,9 @@ class PublicUser(models.Model):
     username = models.CharField(max_length=64)
     pass_hash = models.CharField(max_length=128)
     address = models.CharField(max_length=256)
-    verified = models.BooleanField()
-    latitude = models.DecimalField(max_digits=6, decimal_places=4)
-    longitude = models.DecimalField(max_digits=6, decimal_places=4)
+    verified = models.BooleanField(default=False)
+    latitude = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
     #profile picture
 
     def __repr__(self):

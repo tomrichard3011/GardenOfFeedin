@@ -32,15 +32,58 @@ def createUser(request):
     new = PublicUser.objects.create(email=email,username=username,pass_hash=pw,address=address)
     new.save()
 
-    context = {
-        #'id':new.id,
-        #'email':new.email,
-        'username':new.username,
-        #'pass_hash':new.pass_hash,
-        #'address':new.address,
-    }
+    # context = {
+    #     #'id':new.id,
+    #     #'email':new.email,
+    #     'username':new.username,
+    #     #'pass_hash':new.pass_hash,
+    #     #'address':new.address,
+    # }
+    request.session['id'] = new.id
+    response = redirect('/landing')
+    return response
+    # return render(request,'landing.html',context)
 
-    return render(request,'landing.html',context)
+def landing(request):
+    id = request.session['id']
+    user = PublicUser.objects.get(id=id)
+    context = {
+        'username':user.username,
+    }
+    return render(request,'landing.html', context)
+
+def signin(request):
+    return render(request,'sign-in.html',{})
+
+def signout(request):
+    try:
+        del request.session['id']
+        response = redirect('/')
+        return response
+    except:
+        pass
+    #TODO Handle hack3rs
+
+
+# returns true if email and password for user are valid
+def userLoginAuthentication(email, password):
+    user = PublicUser.objects.get(email=email)
+    # NOTE need to set environment variable: DJANGO_SETTINGS_MODULE=garden.garden.settings
+    if user is None:
+        raise Exception("No such user")
+    return check_password(password, user.pass_hash)
+
+def authenticate(request):
+    email = request.POST.get("email")
+    pw = request.POST.get("password")
+    if(userLoginAuthentication(email,pw)):
+        user = PublicUser.objects.get(email=email)
+        request.session['id'] = user.id
+        response = redirect('/landing')
+        return response
+    response = redirect('/signin')
+    return response
+
 
 
 # TEST METHODS
@@ -105,11 +148,3 @@ def test_authenticate(request):
     except: 
         return HttpResponse("<h1>NOT LEGIT</h1><br><a href='/'>HOME</a>")
 
-# returns true if email and password for user are valid
-def userLoginAuthentication(email, password):
-    user = PublicUser.objects.get(email=email)
-    # NOTE need to set environment variable: DJANGO_SETTINGS_MODULE=garden.garden.settings
-    if user is None:
-        raise Exception("No such user")
-
-    return check_password(password, user.pass_hash)
