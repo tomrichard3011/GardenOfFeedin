@@ -8,8 +8,8 @@ class PublicUser(models.Model):
     pass_hash = models.CharField(max_length=128)
     address = models.CharField(max_length=256)
     verified = models.BooleanField()
-    latitude = models.DecimalField(max_digits=6, decimal_places=4)
-    longitude = models.DecimalField(max_digits=6, decimal_places=4)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     #profile picture
 
     def __repr__(self):
