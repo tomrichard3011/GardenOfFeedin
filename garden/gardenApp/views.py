@@ -33,7 +33,7 @@ def test_make(request):
 
 
     #create user
-    new = PublicUser.objects.create(email=email,username=username,pass_hash=pw)
+    new = PublicUser.objects.create(email=email, username=username, pass_hash=pw)
     new.save()
 
     context = {
