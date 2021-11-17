@@ -21,7 +21,7 @@
 	
 		<nav class="navbar navbar-expand-md">
 			<div class="container-fluid"> 
-				<a class="navbar-brand" href="landing.html">Garden of Feedin'
+				<a class="navbar-brand" href="/landing">Garden of Feedin'
 				</a>
 				<button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#main-navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -39,7 +39,7 @@
 						</li>
 						
 						<li class="nav-item">
-							<a href="homepage.html" class="btn">Sign Out</a>
+							<a href="/signout" class="btn">Sign Out</a>
 							<!-- when you press the button should there be a sign-out.html that confirms signing out? or is going back to the homepage.html enough (of course with the back end signing them out) 
 							There are 'simple alerts' that I think I can include in the homepage so when signing out, it shows up at the top of the homepage which informs the user of a successful sign out -->
 						</li>
@@ -48,14 +48,14 @@
 			</div>
 		</nav>
 		
-		<nav class="navbar navbar-expand-md">
-			<div class="container-fluid"> 
-				<h3>Welcome {{ username }}</h3>
+		<!-- Welcome Bar -->
+		<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86;">
+			<div class="welcome">
+ 			 <h3>Welcome {{ username }}</h3>
 			</div>
 		</nav>
-
-		<!-- Search bar and filtering options -->
 		
+		<!-- Search bar and filtering options -->
 		<div class="container-fluid form-group">
 			<form class="d-flex">
         		<input class="form-control me-2 w-50" id="search" type="search" placeholder="Type here..." aria-label="Search">

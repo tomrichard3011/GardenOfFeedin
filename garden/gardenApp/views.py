@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
 import secrets
-import utils.Geo
 
 def home(request):
     return render(request, 'homepage.html')
@@ -21,33 +20,69 @@ def createUser(request):
     email = request.POST.get("email")
 
     # hash password
-    pw = hashPassword(pw)
-
-    # get coordinates from address
-    #TODO handle bad address
-    location = utils.Geo.addressToCoordinates(address)
+    # random salt generation - 32 bytes should be secure enough
+    uniqueSalt = secrets.token_urlsafe(32)
+    pw = PBKDF2PasswordHasher.encode(
+        self=PBKDF2PasswordHasher,
+        password=pw,
+        salt=uniqueSalt
+    )
 
     #create user
-    new = PublicUser.objects.create(
-        email=email,
-        username=username,
-        pass_hash=pw,
-        address=address,
-        verified=False,
-        latitude=location.latitude, #test
-        longitude=location.longitude # test
-    )
+    new = PublicUser.objects.create(email=email,username=username,pass_hash=pw,address=address)
     new.save()
 
-    context = {
-        #'id':new.id,
-        #'email':new.email,
-        'username':new.username,
-        #'pass_hash':new.pass_hash,
-        #'address':new.address,
-    }
+    # context = {
+    #     #'id':new.id,
+    #     #'email':new.email,
+    #     'username':new.username,
+    #     #'pass_hash':new.pass_hash,
+    #     #'address':new.address,
+    # }
+    request.session['idx'] = new.id
+    response = redirect('/landing')
+    return response
+    # return render(request,'landing.html',context)
 
-    return render(request,'landing.html',context)
+def landing(request):
+    id = request.session['idx']
+    user = PublicUser.objects.get(id=id)
+    context = {
+        'username':user.username,
+    }
+    return render(request,'landing.html', context)
+
+def signin(request):
+    return render(request,'sign-in.html',{})
+
+def signout(request):
+    try:
+        del request.session['idx']
+        response = redirect('/')
+        return response
+    except:
+        pass
+    #TODO Handle hack3rs
+
+# returns true if email and password for user are valid
+def userLoginAuthentication(email, password):
+    user = PublicUser.objects.get(email=email)
+    # NOTE need to set environment variable: DJANGO_SETTINGS_MODULE=garden.garden.settings
+    if user is None:
+        raise Exception("No such user")
+    return check_password(password, user.pass_hash)
+
+def authenticate(request):
+    email = request.POST.get("email")
+    pw = request.POST.get("password")
+    if(userLoginAuthentication(email,pw)):
+        user = PublicUser.objects.get(email=email)
+        request.session['idx'] = user.id
+        response = redirect('/landing')
+        return response
+    response = redirect('/signin')
+    return response
+
 
 
 # TEST METHODS
@@ -67,7 +102,13 @@ def test_make(request):
     email = request.POST.get("email")
 
     # hash password
-    pw = hashPassword(pw)
+    # random salt generation - 32 bytes should be secure enough
+    uniqueSalt = secrets.token_urlsafe(32)
+    pw = PBKDF2PasswordHasher.encode(
+        self=PBKDF2PasswordHasher,
+        password=pw,
+        salt=uniqueSalt
+    )
 
     #create user
     new = PublicUser.objects.create(email=email, username=username, pass_hash=pw)
@@ -106,30 +147,3 @@ def test_authenticate(request):
     except: 
         return HttpResponse("<h1>NOT LEGIT</h1><br><a href='/'>HOME</a>")
 
-'''
-Checks the validity of a user in the local database.
-routes based on validity of credentials
-'''
-def userLoginAuthentication(email, password):
-    user = PublicUser.objects.get(email=email)
-    # NOTE need to set environment variable: DJANGO_SETTINGS_MODULE=garden.garden.settings
-    if user is None:
-        raise Exception("No such user")
-
-    return check_password(password, user.pass_hash)
-
-'''
-Hashes a string
-Using PBKDF2 with 32 byte salt
-Returns string of password hash
-'''
-def hashPassword(plaintext):
-    # hash password
-    # random salt generation - 32 bytes should be secure enough
-    uniqueSalt = secrets.token_urlsafe(32)
-    passwordHash = PBKDF2PasswordHasher.encode(
-        self=PBKDF2PasswordHasher,
-        password=plaintext,
-        salt=uniqueSalt
-    )
-    return passwordHash
