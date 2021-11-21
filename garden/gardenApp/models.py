@@ -7,7 +7,7 @@ class PublicUser(models.Model):
     username = models.CharField(max_length=64)
     pass_hash = models.CharField(max_length=128)
     address = models.CharField(max_length=256)
-    verified = models.BooleanField()
+    verified = models.BooleanField(default=False)
     latitude = models.FloatField()
     longitude = models.FloatField()
     #profile picture
@@ -18,7 +18,9 @@ class PublicUser(models.Model):
 
 class Produce(models.Model):
     produce_name = models.CharField(max_length=64)
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
+    weight = models.FloatField()
+    fruits = models.BooleanField()
+    veggies = models.BooleanField()
     owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
 
 
@@ -36,11 +38,11 @@ class ProduceAlert(models.Model):
 class ProduceRequest(models.Model):
     produce_name = models.CharField(max_length=64)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
-    corp_user = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
+    user = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
 
 
-class Article(models.Model):
-    title = models.CharField(max_length=64)
-    date = models.DateField()  # set manually?
-    author = models.CharField(max_length=64)
-    content = models.TextField()
+# class Article(models.Model):
+#     title = models.CharField(max_length=64)
+#     date = models.DateField()  # set manually?
+#     author = models.CharField(max_length=64)
+#     content = models.TextField()
