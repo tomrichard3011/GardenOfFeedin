@@ -3,39 +3,8 @@ from django.http import HttpResponse
 from gardenApp.models import PublicUser
 from django.contrib.auth import authenticate
 from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
-import secrets
 from utils.Geo import *
-
-'''
-Hashes a string
-Using PBKDF2 with 32 byte salt
-Returns string of password hash
-'''
-def hashPassword(plaintext):
-    # hash password
-    # random salt generation - 32 bytes should be secure enough
-    uniqueSalt = secrets.token_urlsafe(32)
-    passwordHash = PBKDF2PasswordHasher.encode(
-        self=PBKDF2PasswordHasher,
-        password=plaintext,
-        salt=uniqueSalt
-    )
-    return passwordHash
-
-
-'''
-Checks the validity of a user in the local database.
-routes based on validity of credentials
-'''
-def userLoginAuthentication(email, password):
-    try:
-        user = PublicUser.objects.get(email=email)
-    except:
-        return False
-    if user is None:
-        raise Exception("No such user")
-    return check_password(password, user.pass_hash)
+from utils.Authentication import *
 
 
 def home(request):
@@ -139,11 +108,14 @@ def signout(request):
 def authenticate(request):
     email = request.POST.get("email")
     pw = request.POST.get("password")
+    print(email)
+    print(pw)
     if (userLoginAuthentication(email, pw)):
         user = PublicUser.objects.get(email=email)
         request.session['id'] = user.id
         response = redirect('/landing')
         return response
+    print("invalid login")
     response = redirect('/signin')
     return response
 
@@ -167,18 +139,11 @@ def authenticate(request):
 #     pw = request.POST.get("password")
 #     email = request.POST.get("email")
 
-#     # hash password
-#     # random salt generation - 32 bytes should be secure enough
-#     uniqueSalt = secrets.token_urlsafe(32)
-#     pw = PBKDF2PasswordHasher.encode(
-#         self=PBKDF2PasswordHasher,
-#         password=pw,
-#         salt=uniqueSalt
-#     )
+    # hash password
+    # pw = hashPassword(pw)
 
-#     # create user
-#     new = PublicUser.objects.create(email=email, username=username, pass_hash=pw)
-#     new.save()
+    # create user
+    # new = PublicUser.objects.create(email=email, username=username, pass_hash=pw)
 
 #     context = {
 #         'id': new.id,
