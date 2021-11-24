@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
 import secrets
+from utils.Geo import *
 
 '''
 Hashes a string
@@ -28,8 +29,10 @@ Checks the validity of a user in the local database.
 routes based on validity of credentials
 '''
 def userLoginAuthentication(email, password):
-    user = PublicUser.objects.get(email=email)
-    # NOTE need to set environment variable: DJANGO_SETTINGS_MODULE=garden.garden.settings
+    try:
+        user = PublicUser.objects.get(email=email)
+    except:
+        return False
     if user is None:
         raise Exception("No such user")
     return check_password(password, user.pass_hash)
@@ -53,8 +56,23 @@ def createUser(request):
     # hash password
     pw = hashPassword(pw)
 
+    #TODO handle bad address
+    location = addressToCoordinates(address)
+
     # create user
-    new = PublicUser.objects.create(email=email, username=username, pass_hash=pw, address=address)
+    #TODO catch user creation error
+    # could be for already existing email
+    # put it in a try except block
+    # try:
+    new = PublicUser.objects.create(
+        email=email,
+        username=username,
+        pass_hash=pw,
+        address=address,
+        verified=False,
+        latitude=location.latitude,
+        longitude=location.longitude
+    )
     new.save()
 
     # context = {
@@ -69,9 +87,15 @@ def createUser(request):
     return response
     # return render(request,'landing.html',context)
 
-
+# TODO if session not active, need to redirect (to homepage probably)
+# should add that to every possible page?
+# just wrote a quick fix
 def landing(request):
-    id = request.session['idx']
+    id = -1
+    try:
+        id = request.session['id']
+    except:
+        return redirect("/")
     user = PublicUser.objects.get(id=id)
     context = {
         'username': user.username,
@@ -85,20 +109,21 @@ def signin(request):
 
 def signout(request):
     try:
-        del request.session['idx']
+        del request.session['id']
         response = redirect('/')
         return response
     except:
         pass
     # TODO Handle hack3rs
 
-
+# TODO handle nonexistent user/bad login info
+# AKA username/password incorrect
 def authenticate(request):
     email = request.POST.get("email")
     pw = request.POST.get("password")
     if (userLoginAuthentication(email, pw)):
         user = PublicUser.objects.get(email=email)
-        request.session['idx'] = user.id
+        request.session['id'] = user.id
         response = redirect('/landing')
         return response
     response = redirect('/signin')
@@ -169,22 +194,3 @@ def test_authenticate(request):
             return HttpResponse("<h1>NOT LEGIT</h1><br><a href='/'>HOME</a>")
     except:
         return HttpResponse("<h1>NOT LEGIT</h1><br><a href='/'>HOME</a>")
-
-
-'''
-Hashes a string
-Using PBKDF2 with 32 byte salt
-Returns string of password hash
-'''
-
-
-def hashPassword(plaintext):
-    # hash password
-    # random salt generation - 32 bytes should be secure enough
-    uniqueSalt = secrets.token_urlsafe(32)
-    passwordHash = PBKDF2PasswordHasher.encode(
-        self=PBKDF2PasswordHasher,
-        password=plaintext,
-        salt=uniqueSalt
-    )
-    return passwordHash
