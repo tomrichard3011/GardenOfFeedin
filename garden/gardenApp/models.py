@@ -10,7 +10,7 @@ class PublicUser(models.Model):
     verified = models.BooleanField(default=False)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    #profile picture
+    image = models.ImageField(upload_to="profile_images/", null=True)
 
     def __repr__(self):
         return str(self.__dict__)
@@ -22,6 +22,8 @@ class Produce(models.Model):
     fruits = models.BooleanField()
     veggies = models.BooleanField()
     owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
+    image = models.ImageField(upload_to="produce_images/", null=True)
+
 
 
 class Donation(models.Model):

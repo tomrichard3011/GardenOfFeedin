@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from gardenApp.models import *
 from utils.Geo import *
 from utils.Search import *
+from utils.Authentication import *
 from datetime import date
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
 
@@ -44,6 +45,7 @@ class databaseTest(TestCase):
         self.assertEqual(john.latitude, 37.4527)
         self.assertEqual(john.longitude, -121.9101)
 
+    # TODO Test image field
     def test_produce(self):
         banana = Produce.objects.get(produce_name="bananas")
         self.assertEqual(banana.produce_name, "bananas")
@@ -231,8 +233,8 @@ class clientTest(TestCase):
     # /authenticate test
     def test_validLoginRedirect(self):
         client = Client()
-        response = client.post('/authenticate', {'email': "john@doe.com", 'password': 'password'}, follow=True)
-        self.assertEqual(200, response.status_code)
+        response = client.post('/authenticate', {'email': "john@doe.com", 'password': 'password'})
+        self.assertEqual(302, response.status_code)
         self.assertEqual("/landing", response.url)
 
     def test_invalidLoginRedirect(self):
