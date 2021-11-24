@@ -23,22 +23,34 @@ class Produce(models.Model):
     veggies = models.BooleanField()
     owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
 
+    def __repr__(self):
+        return str(self.__dict__)
+
 
 class Donation(models.Model):
     produce_id = models.ForeignKey(Produce, on_delete=models.CASCADE)  # foreign key
     reciever = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
     date_created = models.DateField(auto_now_add=True)  # date time
 
+    def __repr__(self):
+        return str(self.__dict__)
+
 
 class ProduceAlert(models.Model):
     produce_id = models.ForeignKey(Produce, on_delete=models.CASCADE)  # foreign key
     date_created = models.DateField(auto_now_add=True)  # date time
+
+    def __repr__(self):
+        return str(self.__dict__)
 
 
 class ProduceRequest(models.Model):
     produce_name = models.CharField(max_length=64)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
     user = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
+
+    def __repr__(self):
+        return str(self.__dict__)
 
 
 # class Article(models.Model):

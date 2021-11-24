@@ -231,8 +231,8 @@ class clientTest(TestCase):
     # /authenticate test
     def test_validLoginRedirect(self):
         client = Client()
-        response = client.post('/authenticate', {'email': "john@doe.com", 'password': 'password'}, follow=True)
-        self.assertEqual(200, response.status_code)
+        response = client.post('/authenticate', {'email': "john@doe.com", 'password': 'password'})
+        self.assertEqual(302, response.status_code)
         self.assertEqual("/landing", response.url)
 
     def test_invalidLoginRedirect(self):

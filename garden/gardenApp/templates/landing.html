@@ -57,11 +57,21 @@
 		
 		<!-- Search bar and filtering options -->
 		<div class="container-fluid form-group">
-			<form class="d-flex">
-        		<input class="form-control me-2 w-50" id="search" type="search" placeholder="Type here..." aria-label="Search">
-        		<button class="btn btn-primary" type="submit">Search</button>
-      		</form>
-			
+			<div class="row">
+				<form class="d-flex column-3">
+					<input class="form-control me-2 w-50" id="search" type="search" placeholder="Type here..." aria-label="Search">
+					<button class="btn btn-primary" type="submit">Search</button>
+				</form>
+				<form class="d-flex column-3" action='/landing'>
+					<button class="btn btn-primary" type="submit">Post</button>
+				</form>
+				
+				<form class="d-flex column-3">
+					<button class="btn btn-primary" type="submit">Request</button>
+				</form>
+			</div>
+
+
 			<form class="d-flex justify-content-left w-150">
 				<h class="align-self-center form-check form-switch">
 			  		<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
