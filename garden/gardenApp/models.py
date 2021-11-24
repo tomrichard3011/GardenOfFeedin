@@ -10,8 +10,8 @@ class PublicUser(models.Model):
     verified = models.BooleanField(default=False)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    #profile picture
-    #picture = models.ImageField(upload_to ='./../staticfiles/img')
+    image = models.ImageField(upload_to="profile_images/", null=True)
+
     def __repr__(self):
         return str(self.__dict__)
 
@@ -23,8 +23,8 @@ class Produce(models.Model):
     veggies = models.BooleanField()
     owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
     date_created = models.DateField(auto_now_add=True)  # date time
-    #picture
-    #description
+    image = models.ImageField(upload_to="produce_images/", null=True)
+
 
 
 class Donation(models.Model):

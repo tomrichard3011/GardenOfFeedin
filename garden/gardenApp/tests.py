@@ -1,21 +1,13 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from gardenApp.models import *
 from utils.Geo import *
 from utils.Search import *
+from utils.Authentication import *
 from datetime import date
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
 
+
 # Create your tests here.
-
-# TODO Test links
-# internal link
-# external links
-
-# TODO Forms
-# field validation
-# error message
-# optional and mandatory fields
-
 class databaseTest(TestCase):
     # database creation/retrieval
     def setUp(self):
@@ -53,6 +45,7 @@ class databaseTest(TestCase):
         self.assertEqual(john.latitude, 37.4527)
         self.assertEqual(john.longitude, -121.9101)
 
+    # TODO Test image field
     def test_produce(self):
         banana = Produce.objects.get(produce_name="bananas")
         self.assertEqual(banana.produce_name, "bananas")
@@ -66,16 +59,22 @@ class databaseTest(TestCase):
         self.assertEqual(donation.produce_id, Produce.objects.get(produce_name="bananas"))
         self.assertEqual(donation.reciever, PublicUser.objects.get(username="username"))
 
-
     def test_produceAlert(self):
         alert = ProduceAlert.objects.get(produce_id=Produce.objects.get(produce_name="bananas"))
         self.assertEqual(alert.date_created, date.today())
 
-    #TODO none found tests
-    def test_badAccess(self):
-        return
-
-    #TODO bad inputs
+    def test_existingEmail(self):
+        with self.assertRaises(Exception) as context:
+            PublicUser.objects.create(
+                email="john@doe.com",
+                username="username",
+                pass_hash="hash",
+                address="1 Washington Sq, San Jose, CA 95192",
+                verified=False,
+                latitude=37.4527,
+                longitude=-121.9101
+            )
+        self.assertTrue("UNIQUE constraint failed: gardenApp_publicuser.email" in str(context.exception))
 
 
 class geoCodingTest(TestCase):
@@ -89,13 +88,11 @@ class geoCodingTest(TestCase):
         self.assertAlmostEqual(location.latitude, latitude, 4)
         self.assertAlmostEqual(location.longitude, longitude, 4)
 
-
     def test_badAdress(self):
         addr = "123 bad address City, State"
         with self.assertRaises(Exception) as context:
             addressToCoordinates(addr)
         self.assertTrue("Invalid or Nonexistent address given" in str(context.exception))
-
 
     def test_coordDistance(self):
         addr1 = "1 Washington Sq, San Jose, CA 95192"
@@ -109,7 +106,6 @@ class geoCodingTest(TestCase):
             (location2.latitude, location2.longitude)
         )
         self.assertEqual(round(calc_distance, 2), actual_distance)
-
 
 
 class passwordTest(TestCase):
@@ -181,7 +177,7 @@ class searchFunction(TestCase):
         )
 
         Produce.objects.create(
-            produce_name="bananas",
+            produce_name="apples",
             weight=10.00,
             fruits=True,
             veggies=False,
@@ -193,7 +189,7 @@ class searchFunction(TestCase):
         jane = PublicUser.objects.get(email="jane@doe.com")
         alice = PublicUser.objects.get(email="alice@fake.com")
 
-        self.assertEqual([jane,alice], getLocalUsers(john, 1))
+        self.assertEqual([jane, alice], getLocalUsers(john, 1))
 
     def test_searchGetLocalProduce(self):
         john = PublicUser.objects.get(email="john@doe.com")
@@ -201,9 +197,88 @@ class searchFunction(TestCase):
 
         self.assertEqual(produce_list, getLocalProduce(john, "banana", True, False, 1))
 
-    #TODO no search results case
-
     def test_noResultSearch(self):
         john = PublicUser.objects.get(email="john@doe.com")
         self.assertEqual([], getLocalProduce(john, "does not exist", False, True, 1))
+
+# TODO Test links
+# internal link
+# external links
+
+# TODO Forms
+# field validation
+# error message
+# optional and mandatory fields
+
+class clientTest(TestCase):
+    def setUp(self):
+        plaintext = "password"
+        salt = "salt"
+        passwordHash = PBKDF2PasswordHasher.encode(
+            self=PBKDF2PasswordHasher,
+            password=plaintext,
+            salt=salt
+        )
+
+        PublicUser.objects.create(
+            email="john@doe.com",
+            username="username",
+            pass_hash=passwordHash,
+            address="1 Washington Sq, San Jose, CA 95192",
+            verified=False,
+            latitude=37.4527,
+            longitude=-121.9101
+        )
+
+    # /authenticate test
+    def test_validLoginRedirect(self):
+        client = Client()
+        response = client.post('/authenticate', {'email': "john@doe.com", 'password': 'password'})
+        self.assertEqual(302, response.status_code)
+        self.assertEqual("/landing", response.url)
+
+    def test_invalidLoginRedirect(self):
+        client = Client()
+        response = client.post('/authenticate', {'email': "doesnt@exist.com", 'password': 'fakepassword'})
+        self.assertEqual(302, response.status_code)
+        self.assertEqual("/signin", response.url)
+
+    # /createuser test
+    def test_userCreationRedirect(self):
+        client = Client()
+        response = client.post('/createuser', {
+            'username': 'new',
+            'email': "doesnt@exist.com",
+            'password': 'password',
+            'address': '1 Washington Sq, San Jose, CA 95192'
+        })
+
+        self.assertEqual(302, response.status_code)
+        self.assertEqual("/landing", response.url)
+
+    def test_userCreationDBCheck(self):
+        client = Client()
+        client.post('/createuser', {
+            'username': 'new',
+            'email': "doesnt@exist.com",
+            'password': 'password',
+            'address': '1 Washington Sq, San Jose, CA 95192'
+        })
+
+        newUser = PublicUser.objects.get(email="doesnt@exist.com")
+        self.assertEqual("new", newUser.username)
+        self.assertEqual("doesnt@exist.com", newUser.email)
+        self.assertTrue(check_password("password", newUser.pass_hash))
+        self.assertEqual('1 Washington Sq, San Jose, CA 95192', newUser.address)
+
+
+    # bad access tests
+    def test_invalidLandingAccess(self):
+        client = Client()
+        request = client.get("/landing", follow=True)
+        # [('/', 302)] means we recieved a 302 response and got redirected to '/'
+        expected_chain = [('/', 302)]
+        self.assertEqual(expected_chain, request.redirect_chain)
+        self.assertEqual(200, request.status_code)
+
 
