@@ -228,10 +228,11 @@ class clientTest(TestCase):
             longitude=-121.9101
         )
 
+    # /authenticate test
     def test_validLoginRedirect(self):
         client = Client()
-        response = client.post('/authenticate', {'email': "john@doe.com", 'password': 'password'})
-        self.assertEqual(302, response.status_code)
+        response = client.post('/authenticate', {'email': "john@doe.com", 'password': 'password'}, follow=True)
+        self.assertEqual(200, response.status_code)
         self.assertEqual("/landing", response.url)
 
     def test_invalidLoginRedirect(self):
@@ -240,6 +241,7 @@ class clientTest(TestCase):
         self.assertEqual(302, response.status_code)
         self.assertEqual("/signin", response.url)
 
+    # /createuser test
     def test_userCreationRedirect(self):
         client = Client()
         response = client.post('/createuser', {
@@ -252,9 +254,9 @@ class clientTest(TestCase):
         self.assertEqual(302, response.status_code)
         self.assertEqual("/landing", response.url)
 
-    def test_userCreationDB(self):
+    def test_userCreationDBCheck(self):
         client = Client()
-        response = client.post('/createuser', {
+        client.post('/createuser', {
             'username': 'new',
             'email': "doesnt@exist.com",
             'password': 'password',
@@ -267,11 +269,14 @@ class clientTest(TestCase):
         self.assertTrue(check_password("password", newUser.pass_hash))
         self.assertEqual('1 Washington Sq, San Jose, CA 95192', newUser.address)
 
+
+    # bad access tests
     def test_invalidLandingAccess(self):
         client = Client()
         request = client.get("/landing", follow=True)
-        request.redirect_chain
         # [('/', 302)] means we recieved a 302 response and got redirected to '/'
         expected_chain = [('/', 302)]
         self.assertEqual(expected_chain, request.redirect_chain)
         self.assertEqual(200, request.status_code)
+
+

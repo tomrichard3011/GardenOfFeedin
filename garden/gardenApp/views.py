@@ -88,6 +88,7 @@ def createUser(request):
     # return render(request,'landing.html',context)
 
 # TODO if session not active, need to redirect (to homepage probably)
+# should add that to every possible page?
 # just wrote a quick fix
 def landing(request):
     id = -1
