@@ -26,11 +26,17 @@ class Produce(models.Model):
     image = models.ImageField(upload_to="produce_images/", null=True)
 
 
+    def __repr__(self):
+        return str(self.__dict__)
+
 
 class Donation(models.Model):
     produce_id = models.ForeignKey(Produce, on_delete=models.CASCADE)  # foreign key
     reciever = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
     date_created = models.DateField(auto_now_add=True)  # date time
+
+    def __repr__(self):
+        return str(self.__dict__)
 
 
 class ProduceRequest(models.Model):

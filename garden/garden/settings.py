@@ -127,7 +127,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Media files (pictures, video
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'gardenApp/media')
 MEDIA_URL = '/media/'
 
 # Default primary key field type

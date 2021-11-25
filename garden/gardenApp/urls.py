@@ -12,12 +12,15 @@ urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('authenticate', views.authenticate, name='authenticate'),
     path('signout', views.signout, name='signout'),
+
     # TEST URLS
-    path('testhome', views.test_home, name='testhome'),
-    path('testlogin', views.test_login, name='testlogin'),
-    path('testcreate', views.test_createUser, name='testcreate'),
-    path('testmake', views.test_make, name='testmake'),
-    path('testvalidate',views.test_authenticate, name='testauthenticate')
+    path('testpostpage', views.createPostPage, name='cpp'),
+    path('testpost', views.createPost, name='createpost'),
+    # path('testhome', views.test_home, name='testhome'),
+    # path('testlogin', views.test_login, name='testlogin'),
+    # path('testcreate', views.test_createUser, name='testcreate'),
+    # path('testmake', views.test_make, name='testmake'),
+    # path('testvalidate',views.test_authenticate, name='testauthenticate')
 ] + \
     static(settings.STATIC_URL, document_root = settings.STATIC_ROOT) + \
     static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
