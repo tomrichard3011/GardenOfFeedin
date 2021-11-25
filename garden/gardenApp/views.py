@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from gardenApp.models import PublicUser
+from gardenApp.models import *
 from django.contrib.auth import authenticate
 from django.contrib.auth.backends import BaseBackend
 from utils.Geo import *
@@ -65,16 +65,49 @@ def createUser(request):
 # should add that to every possible page?
 # just wrote a quick fix
 
+def createPostPage(request):
+    return render(request, 'test/testpost.html', {})
+
 def createPost(request):
     produce_name = request.POST.get("name")
     weight = request.POST.get("weight")
-    fruits = request.POST.get("fruits")
-    veggies = request.POST.get("veggies")
+    t =request.POST.get("type")
+    fruits = ""
+    veggies = ""
+    if t == "fruit":
+        fruits = True
+        veggies = False
+    else:
+        fruits = False
+        veggies = True
     
     owner = request.session['id']
+    image = request.FILES.get('image')
 
+    ##################################
+    # FOR DEBUGGING
+    print(produce_name)
+    print(weight)
+    print(fruits)
+    print(veggies)
+    print(owner)
+    print(image)
+    ##################################
 
-
+    try: 
+        new = Produce.objects.create(
+            produce_name=produce_name,
+            weight=float(weight),
+            fruits=fruits,
+            veggies=veggies,
+            owner=PublicUser.objects.get(id=owner),
+            image=image
+        )
+    except Exception as e:
+        print(e)
+        return redirect('/createpost')
+    
+    return redirect('/landing')
 
 def landing(request):
     id = -1

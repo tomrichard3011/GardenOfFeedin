@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>CREATE POST</h1>
+    <form action = "/testpost" method="POST" enctype='multipart/form-data'>
+        {% csrf_token %}
+        <label for="name">produce name:</label><br>
+        <input type="text" id="1" name="name"><br>
+        <label for="weight">weight:</label><br>
+        <input type="number" id="2" name="weight"><br>
+        #fruit or veg
+        <input type="radio" id="3" name="type" value="fruit">
+        <label for="type">fruit:</label><br>
+        <input type="radio" id="3" name="type" value="veg">
+        <label for="type">veg:</label><br>
+
+        #image
+        <label for="image">Select a file:</label>
+        <input type="file" id="myfile" name="image">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    <a href='/'>HOME</a>
+</body>
+</html>
