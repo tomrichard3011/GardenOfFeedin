@@ -27,7 +27,7 @@ def getLocalProduce(currUser, searchQuery, fruits, veggies, miles):
         produce_query_set = Produce.objects.filter(owner=user, fruits=fruits, veggies=veggies).all()
 
         for produce in produce_query_set:
-            if produce is not None and searchQuery in produce.produce_name:
+            if produce is not None and (searchQuery in produce.produce_name or produce.produce_name in searchQuery):
                 nearbyProduce.append(produce)
 
     return nearbyProduce

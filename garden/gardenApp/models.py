@@ -23,7 +23,7 @@ class Produce(models.Model):
     veggies = models.BooleanField()
     owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
     date_created = models.DateField(auto_now_add=True)  # date time
-    image = models.ImageField(upload_to="produce_images/", null=True)
+    image = models.ImageField(upload_to="produce_images", null=True)
 
 
     def __repr__(self):
