@@ -27,8 +27,7 @@ routes based on validity of credentials
 def userLoginAuthentication(email, password):
     try:
         user = PublicUser.objects.get(email=email)
-    except Exception as e:
-        print(e)
+    except Exception:
         return False
     if user is None:
         raise Exception("No such user")

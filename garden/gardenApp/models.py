@@ -10,7 +10,7 @@ class PublicUser(models.Model):
     verified = models.BooleanField(default=False)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    image = models.ImageField(upload_to="profile_images/", null=True)
+    #image = models.ImageField(upload_to="profile_images", null=True)
 
     def __repr__(self):
         return str(self.__dict__)
