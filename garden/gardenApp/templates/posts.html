@@ -7,7 +7,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="./../static/css/main.css">
 		
-		<title>Landing Page</title>
+		<title>Manage Posts</title>
 		
 		<!-- Required meta tags -->
         <meta charset="utf-8">
@@ -49,73 +49,11 @@
 		</nav>
 		
 		<!-- Welcome Bar -->
-		<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86;">
+		<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86; margin-bottom: 15px;">
 			<div class="welcome">
- 			 <h3>Welcome {{ username }}</h3>
+ 			 <h3>Delete and edit your posts here</h3>
 			</div>
 		</nav>
-		
-		<!-- Search bar and filtering options -->
-		<div class="container-fluid form-group ">
-			<div class="row">
-				<form class="d-flex col-8" style="margin-right: 0;">
-					<input class="form-control me-2 w-150" id="search" type="search" placeholder="Type here..." aria-label="Search">
-					<button class="btn btn-primary" style="margin-right: 0px;" type="submit">Search</button>
-				</form>
-				
-				<form class="col-2 col-md-auto" style="margin-left:0px; margin-right: 0px;" action="/posts">
-					<button class="btn btn-primary" type="button">Post</button>
-				</form>
-				<form class="col-2 col-md-auto" action="/posts">
-					<button class="btn btn-primary" style="margin-left:10px; margin-right: 0px;" type="button">Request</button>
-				</form>
-			</div>
-		</div>
-
-			<p style="margin-bottom: 0px;">Want to give / Want to receive</p>
-			<form class="d-flex justify-content-center w-65" style="margin-top: 0px; margin-bottom: 20px;">
-				<h class="align-self-center form-check form-switch">
-			  		<input class="form-check-input" style="margin-top: 0; margin-right: 100px;" type="checkbox" id="flexSwitchCheckDefault">
-			  		<label class="form-check-label" for="flexSwitchCheckDefault"></label>
-			  	</h>
-        		
-				<!--<button class="flex-grow-1 btn btn-primary" id="btn-fruit" type="submit">Fruit</button>
-        		<button class="flex-grow-1 btn btn-primary" id="btn-vegetable" type="submit">Vegetable</button>-->
-				
-				<input type="radio" class="btn-check" name ="options" id="btn-fruit" autocomplete="off">
-				<label class="align-self-center w-25 btn btn-outline-success" for="btn-fruit">Fruit</label><br>
-				
-				<input type="radio" class="btn-check" name="options" id="btn-veg" autocomplete="off">
-				<label class="align-self-center w-25 btn btn-outline-success" for="btn-veg">Vegetable</label><br>
-				
-				<select class="align-self-center w-25 form-select" aria-label="Default select example">
-					<option selected>Distance from you</option>
-					<option value="5">&lt;5 mi</option>
-					<option value="10">10 mi</option>
-					<option value="15">15 mi</option>
-					<option value="25">25 mi</option>
-					<option value="35">35 mi</option>
-				</select>
-
-			<!--
-			<div class="dropdown">
-				<button class="btn btn-secondary dropdown-toggle" type="button" id="distance" data-bs-toggle="dropdown" aria-expanded="false">
-				  Distance
-				</button>
-				<ul class="dropdown-menu" aria-labelledby="distance">
-				  <li><h6 class="dropdown-header">Distance from you</h6></li>
-				  <li><a class="dropdown-item" href="#">&lt; 5 mi</a></li>
-				  <li><a class="dropdown-item" href="#">10 mi</a></li>
-				  <li><a class="dropdown-item" href="#">25 mi</a></li>
-				  <li><a class="dropdown-item" href="#">35 mi</a></li>
-				</ul>
-			 </div>
-				-->
-
-      		</form>
-			
-		</div>
-		
 		
 		
 		<!-- Button trigger modal -->
@@ -162,7 +100,7 @@
 						  </div>
 					  </div>
 					  <div class="col">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
+							<p class="card-text">[ProduceName]<br>[Weight]<br>[Want to give/want to receive]</p>
 						  </div>
 					</div>
 				  <div class="row">
@@ -170,12 +108,9 @@
 					</div>
 			  </div>
 			  <div class="modal-footer">
-				<svg class="bd-placeholder-img rounded-circle" width="50" height="50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Profile Picture</title><rect width="100%" height="100%" fill="#777"/></svg>
-				  
-				<p class="w-50">[Username]</p>
-
 				<!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-				<button type="button" class="btn btn-primary">Send Message</button>
+				<button type="button" class="btn btn-primary">Edit post</button>
+				<button type="button" class="btn btn-primary">Delete post</button>
 			  </div>
 			</div>
 		  </div>
@@ -190,7 +125,7 @@
 					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
 						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
 						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
+							<p class="card-text">[ProduceName]<br>[Weight]<br>[Want to give/want to receive]</p>
 						</div>
 					</div>
 				</div>
