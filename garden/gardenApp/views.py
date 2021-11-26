@@ -1,8 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from gardenApp.models import *
-from django.contrib.auth import authenticate
-from django.contrib.auth.backends import BaseBackend
 from utils.Geo import *
 from utils.Authentication import *
 
@@ -72,8 +69,8 @@ def createPost(request):
     produce_name = request.POST.get("name")
     weight = request.POST.get("weight")
     t =request.POST.get("type")
-    fruits = ""
-    veggies = ""
+    #fruits = ""
+    #veggies = ""
     if t == "fruit":
         fruits = True
         veggies = False
@@ -85,13 +82,13 @@ def createPost(request):
     image = request.FILES.get('image')
 
     ##################################
-    # FOR DEBUGGING
-    print(produce_name)
-    print(weight)
-    print(fruits)
-    print(veggies)
-    print(owner)
-    print(image)
+    # # FOR DEBUGGING
+    # print(produce_name)
+    # print(weight)
+    # print(fruits)
+    # print(veggies)
+    # print(owner)
+    # print(image)
     ##################################
 
     try: 
@@ -141,14 +138,12 @@ def signout(request):
 def authenticate(request):
     email = request.POST.get("email")
     pw = request.POST.get("password")
-    print(email)
-    print(pw)
+
     if (userLoginAuthentication(email, pw)):
         user = PublicUser.objects.get(email=email)
         request.session['id'] = user.id
         response = redirect('/landing')
         return response
-    print("invalid login")
     response = redirect('/signin')
     return response
 

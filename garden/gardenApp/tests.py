@@ -5,7 +5,7 @@ from utils.Search import *
 from utils.Authentication import *
 from datetime import date
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, check_password
-
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 # Create your tests here.
 class databaseTest(TestCase):
@@ -280,5 +280,22 @@ class clientTest(TestCase):
         expected_chain = [('/', 302)]
         self.assertEqual(expected_chain, request.redirect_chain)
         self.assertEqual(200, request.status_code)
+
+    def test_createProduceDBCheck(self):
+        client = Client()
+        session = client.session
+        session['id'] = 1
+        session.save()
+
+        image = SimpleUploadedFile("file.png", b"file_content", content_type="file")
+        client.post('/testpost', {'name': 'banana', 'weight': '10', 'type': 'fruit', 'image': image})
+
+        banana = Produce.objects.get(produce_name="banana")
+        self.assertEqual(banana.produce_name, "banana")
+        self.assertEqual(banana.weight, 10.0)
+        self.assertTrue(banana.fruits)
+        self.assertFalse(banana.veggies)
+        self.assertEqual(banana.owner, PublicUser.objects.get(email="john@doe.com"))
+
 
 
