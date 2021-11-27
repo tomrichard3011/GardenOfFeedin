@@ -37,6 +37,9 @@
 						<li class="nav-item">
 							<a class="nav-link" href="posts.html">Manage Posts</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="requests.html">Manage Requests</a>
+						</li>
 						
 						<li class="nav-item">
 							<a href="/signout" class="btn">Sign Out</a>
@@ -120,7 +123,7 @@
 		<!-- use Modal for pop-up when clicking on a post, use Cards for the content (picture with text) -->
 		<!-- Produce grid -->
 		<div class="container d-grid">
-			<div class="row">			
+			<div class="row row-cols-auto">			
 				<div class="col-lg-4 col-md-4 col-sm-12">
 					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
 						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
@@ -129,8 +132,8 @@
 						</div>
 					</div>
 				</div>
-			</div> <!-- remove this line if you want to uncomment the below code -->
-				<!-- <div class="col-lg-4 col-md-4 col-sm-12">
+			 
+				<div class="col-lg-4 col-md-4 col-sm-12">
 					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
 						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
 						<div class="card-body">
@@ -172,7 +175,7 @@
 						</div>
 					</div>
 				</div>
-			</div> -->
+			</div> 
 		</div>
 		
 		<!-- Footer -->
