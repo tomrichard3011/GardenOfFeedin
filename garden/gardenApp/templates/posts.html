@@ -7,7 +7,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="./../static/css/main.css">
 		
-		<title>Landing Page</title>
+		<title>Manage Posts</title>
 		
 		<!-- Required meta tags -->
         <meta charset="utf-8">
@@ -29,13 +29,13 @@
 				<div class="collapse navbar-collapse" id="main-navigation">
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a class="nav-link" href="profile">Profile</a>
+							<a class="nav-link" href="profile.html">Profile</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="messages">Messages</a>
+							<a class="nav-link" href="messenger.html">Messages</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="manage">Manage Posts</a>
+							<a class="nav-link" href="posts.html">Manage Posts</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="requests.html">Manage Requests</a>
@@ -52,110 +52,24 @@
 		</nav>
 		
 		<!-- Welcome Bar -->
-		<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86;">
+		<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86; margin-bottom: 15px;">
 			<div class="welcome">
- 			 <h3>Welcome {{ username }}</h3>
+ 			 <h3>Delete and edit your posts here</h3>
 			</div>
 		</nav>
-		
-		<!-- Search bar and filtering options -->
-		<div class="container-fluid form-group ">
-			<div class="row">
-				<form class="d-flex column-3" action='/search' method='POST'>
-					{% csrf_token %}
-					<input class="form-control me-2 w-50" id="search" type="search" placeholder="Type here..." name="search" aria-label="Search">
-					<button class="btn btn-primary" type="submit">Search</button>
-	
-				<h class="align-self-center form-check form-switch">
-					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="recieving" checked>
-					<label class="form-check-label" for="flexSwitchCheckDefault">Want to give / Want to receive</label>
-				</h>
-			  
-			  <!--<button class="flex-grow-1 btn btn-primary" id="btn-fruit" type="submit">Fruit</button>
-			  <button class="flex-grow-1 btn btn-primary" id="btn-vegetable" type="submit">Vegetable</button>-->
-			  
-			  <input type="radio" class="btn-check" name ="fruit" id="btn-fruit" autocomplete="off">
-			  <label class="align-self-center  btn btn-outline-success" for="btn-fruit">Fruit</label><br>
-			  
-			  <input type="radio" class="btn-check" name="vegetable" id="btn-veg" autocomplete="off">
-			  <label class="align-self-center  btn btn-outline-success" for="btn-veg">Vegetable</label><br>
-			  
-			  <select class="align-self-center w-25 form-select" aria-label="Default select example" name="dist">
-				  <option selected>Distance from you</option>
-				  <option value="5">&lt;5 mi</option>
-				  <option value="10">10 mi</option>
-				  <option value="15">15 mi</option>
-				  <option value="25">25 mi</option>
-				  <option value="35">35 mi</option>
-			  </select>
-				</form>
-			</div>
-
-
-			<!-- <form class="d-flex justify-content-left w-150">
-				<h class="align-self-center form-check form-switch">
-			  		<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-			  		<label class="form-check-label" for="flexSwitchCheckDefault">Want to give / Want to receive</label>
-			  	</h> -->
-        		
-				<!--<button class="flex-grow-1 btn btn-primary" id="btn-fruit" type="submit">Fruit</button>
-        		<button class="flex-grow-1 btn btn-primary" id="btn-vegetable" type="submit">Vegetable</button>-->
-				
-				<!-- <input type="radio" class="btn-check" name ="options" id="btn-fruit" autocomplete="off">
-				<label class="align-self-center  btn btn-outline-success" for="btn-fruit">Fruit</label><br>
-
-				
-				<input type="radio" class="btn-check" name="options" id="btn-veg" autocomplete="off">
-				<label class="align-self-center w-25 btn btn-outline-success" for="btn-veg">Vegetable</label><br>
-				
-				<select class="align-self-center w-25 form-select" aria-label="Default select example">
-					<option selected>Distance from you</option>
-					<option value="5">&lt;5 mi</option>
-					<option value="10">10 mi</option>
-					<option value="15">15 mi</option>
-					<option value="25">25 mi</option>
-					<option value="35">35 mi</option>
-				</select> -->
-
-			<!--
-			<div class="dropdown">
-				<button class="btn btn-secondary dropdown-toggle" type="button" id="distance" data-bs-toggle="dropdown" aria-expanded="false">
-				  Distance
-				</button>
-				<ul class="dropdown-menu" aria-labelledby="distance">
-				  <li><h6 class="dropdown-header">Distance from you</h6></li>
-				  <li><a class="dropdown-item" href="#">&lt; 5 mi</a></li>
-				  <li><a class="dropdown-item" href="#">10 mi</a></li>
-				  <li><a class="dropdown-item" href="#">25 mi</a></li>
-				  <li><a class="dropdown-item" href="#">35 mi</a></li>
-				</ul>
-			 </div>
-				-->
-
-      		</form>
-			  <form class="d-flex column-3" action='/testpostpage'>
-				<button class="btn btn-primary" type="submit">Donate</button>
-			</form>
-			
-			<form class="d-flex column-3">
-				<button class="btn btn-primary" type="submit">Request</button>
-			</form>
-			
-		</div>
-		
 		
 		
 		<!-- Button trigger modal -->
 		<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#popup">
             Launch demo modal
           </button> -->
-		{% for i in searchQuery %}
+		
 		<!-- Modal pop-up -->
 		<div class="modal fade" id="popup" tabindex="-1" aria-labelledby="popupName" aria-hidden="true">
 		  <div class="modal-dialog">
 			<div class="modal-content">
 			  <div class="modal-header">
-				<h5 class="modal-title" id="popupName">{{ i.produce_name }}</h5>
+				<h5 class="modal-title" id="popupName">[ProduceName]</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			  </div>
 			  <div class="modal-body">
@@ -189,7 +103,7 @@
 						  </div>
 					  </div>
 					  <div class="col">
-							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}
+							<p class="card-text">[ProduceName]<br>[Weight]<br>[Want to give/want to receive]</p>
 						  </div>
 					</div>
 				  <div class="row">
@@ -197,38 +111,29 @@
 					</div>
 			  </div>
 			  <div class="modal-footer">
-				<svg class="bd-placeholder-img rounded-circle" width="50" height="50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Profile Picture</title><rect width="100%" height="100%" fill="#777"/></svg>
-				  
-				<p class="w-50">{{ i.owner.username }}</p>
-
 				<!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-				<form action='/createchat' method='POST'>
-					{% csrf_token %}
-					<input type="hidden" id="custId" name="user" value="{{ i.owner.id }}">
-					<button type="submit" class="btn btn-primary">Send Message</button>
-				</form>
+				<button type="button" class="btn btn-primary">Edit post</button>
+				<button type="button" class="btn btn-primary">Delete post</button>
 			  </div>
 			</div>
 		  </div>
 		</div>
 		
-			
-
 		
 		<!-- use Modal for pop-up when clicking on a post, use Cards for the content (picture with text) -->
 		<!-- Produce grid -->
 		<div class="container d-grid">
-			<div class="row">			
+			<div class="row row-cols-auto">			
 				<div class="col-lg-4 col-md-4 col-sm-12">
 					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
-						<img src="{{i.image.url}}" class="card-image-top" alt = "" >
+						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
 						<div class="card-body">
-							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}<br>[Distance]</p>
+							<p class="card-text">[ProduceName]<br>[Weight]<br>[Want to give/want to receive]</p>
 						</div>
 					</div>
 				</div>
-			</div> <!-- remove this line if you want to uncomment the below code -->
-				<!-- <div class="col-lg-4 col-md-4 col-sm-12">
+			 
+				<div class="col-lg-4 col-md-4 col-sm-12">
 					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
 						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
 						<div class="card-body">
@@ -272,7 +177,6 @@
 				</div>
 			</div> 
 		</div>
-		{% endfor %}
 		
 		<!-- Footer -->
 		<footer class="page-footer">
