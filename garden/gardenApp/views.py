@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from gardenApp.models import *
 from utils.Geo import *
 from utils.Authentication import *
-
+from utils import Search
 
 def home(request):
     return render(request, 'homepage.html')
@@ -18,7 +18,7 @@ def createUser(request):
     pw = request.POST.get("password")
     address = request.POST.get("address")
     email = request.POST.get("email")
-
+    
     # hash password
     pw = hashPassword(pw)
 
@@ -78,7 +78,7 @@ def createPost(request):
         fruits = False
         veggies = True
     
-    owner = request.session['id']
+    #owner = request.session['id']
     image = request.FILES.get('image')
 
     ##################################
@@ -97,7 +97,7 @@ def createPost(request):
             weight=float(weight),
             fruits=fruits,
             veggies=veggies,
-            owner=PublicUser.objects.get(id=owner),
+            owner=PublicUser.objects.get(id=request.session['id']),
             image=image
         )
     except Exception as e:
@@ -113,9 +113,12 @@ def landing(request):
     except:
         return redirect("/")
     user = PublicUser.objects.get(id=id)
+    prod = Produce.objects.all()
     context = {
         'username': user.username,
+        'searchQuery': prod
     }
+    print('{} is logged in'.format(user.username))
     return render(request, 'landing.html', context)
 
 
@@ -132,6 +135,31 @@ def signout(request):
         pass
     # TODO Handle hack3rs
 
+def search(request):
+    id = request.session['id']
+    user = PublicUser.objects.get(id=id)
+    
+    print(request.POST)
+
+    searchQuery = request.POST.get("search")
+    recieving = True if request.POST.get("recieving") == 'on' else False
+    
+    fruits = True if request.POST.get("fruit") == 'on' else False
+    veggies = True if request.POST.get("vegetable") == 'on' else False
+    distance = 0
+    try:
+        distance = int(request.POST.get("dist"))
+    except:
+        distance = 1000
+    
+    prodlist = Search.getLocalProduce(user, searchQuery, fruits, veggies, distance, recieving)
+    print(prodlist)
+    context = {
+        'name' : user.username,
+        'searchQuery': prodlist
+    }
+
+    return render(request, 'landing.html', context)
 
 # TODO handle nonexistent user/bad login info
 # AKA username/password incorrect
@@ -147,6 +175,93 @@ def authenticate(request):
     response = redirect('/signin')
     return response
 
+def profile(request):
+    user = PublicUser.objects.get(id=request.session['id'])
+    context = {
+        'user' : user
+    }
+    return render(request, 'test/testprofile.html',context)
+
+def changeProfileImage(request):
+    image = request.FILES.get('image')
+    user = PublicUser.objects.get(id=request.session['id'])
+    user.image = image
+    ##TODO delete previous image
+
+    user.save()
+    return redirect('/profile')
+
+def manage(request):
+    print("HERE")
+    prod = Produce.objects.filter(owner=PublicUser.objects.get(id=request.session['id']))
+    prod = list(prod)
+    print(prod)
+    context = {
+        'produce':prod
+    }
+    return render(request, 'test/testmanage.html', context)
+
+
+def donation(request, id):
+    prod = Produce.objects.get(id=id)
+    print(prod)
+    context = {
+        'prod': prod
+    }
+    return render(request, 'test/testdonation.html', context)
+
+def editDonation(request, id):
+    print(request.POST)
+    prod = Produce.objects.get(id=id)
+    if request.POST.get('name') != '':
+        prod.produce_name = request.POST.get('name')
+    if request.POST.get('weight') != '':
+        prod.weight = request.POST.get('weight')
+    prod.save()
+    return redirect('/donation/{0}'.format(id))
+
+def messages(request):
+    user = PublicUser.objects.get(id=request.session['id'])
+    chats = Search.getAllChatsForUser(user)
+    context = {}
+    allUserMsgs = []
+    for chat in chats:
+        allmsgs = Search.getAllMessagesInChat(chat)
+        allUserMsgs.extend(allmsgs)
+        
+    context['chats'] = chats
+    context['allmsgs'] = allUserMsgs
+    print(context)
+    return render(request,'test/testmessages.html',context)
+
+def createChat(request):
+    users = [
+        PublicUser.objects.get(id=request.session['id']),
+        PublicUser.objects.get(id=request.POST.get('user'))
+    ]
+
+    users.sort(key=lambda x: x.username)
+    user1 = users[0]
+    user2 = users[1]
+
+    print(user1.username)
+    print(user2.username)
+    Chat.objects.create(user1=user1, user2=user2)
+    return redirect('/messages')
+    
+def createMessage(request):
+    chatID = Chat.objects.get(id=request.POST.get('chatID'))
+    user = PublicUser.objects.get(id=request.session['id'])
+    msg = request.POST.get('msg')
+
+    Message.objects.create(
+        chatID=chatID,
+        userID=user,
+        msg=msg
+    )
+
+    return redirect('/messages')
+    
 
 # # TEST METHODS
 # def test_home(request):
