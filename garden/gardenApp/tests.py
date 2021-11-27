@@ -31,9 +31,7 @@ class databaseTest(TestCase):
             produce_id=banana,
             reciever=john
         )
-        ProduceAlert.objects.create(
-            produce_id=banana,
-        )
+
 
     def test_publicUser(self):
         john = PublicUser.objects.get(email="john@doe.com")
@@ -58,10 +56,6 @@ class databaseTest(TestCase):
         donation = Donation.objects.get(reciever=PublicUser.objects.get(username="username"))
         self.assertEqual(donation.produce_id, Produce.objects.get(produce_name="bananas"))
         self.assertEqual(donation.reciever, PublicUser.objects.get(username="username"))
-
-    def test_produceAlert(self):
-        alert = ProduceAlert.objects.get(produce_id=Produce.objects.get(produce_name="bananas"))
-        self.assertEqual(alert.date_created, date.today())
 
     def test_existingEmail(self):
         with self.assertRaises(Exception) as context:
