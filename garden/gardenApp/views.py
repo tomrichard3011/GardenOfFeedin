@@ -25,7 +25,8 @@ def createUser(request):
     #TODO handle bad address
     try:
         location = addressToCoordinates(address)
-    except:
+    except Exception as e:
+        print(str(e))
         return redirect("/signup")
 
     # create user
@@ -43,7 +44,9 @@ def createUser(request):
         latitude=location.latitude,
         longitude=location.longitude
         )
-    except:
+        print(new)
+    except Exception as e:
+        print(str(e))
         return redirect('/signup')
 
     # context = {
@@ -63,14 +66,14 @@ def createUser(request):
 # just wrote a quick fix
 
 def createPostPage(request):
-    return render(request, 'test/testpost.html', {})
+    return render(request, 'createpost.html', {})
 
 def createPost(request):
-    produce_name = request.POST.get("name")
+    produce_name = request.POST.get("name").lower()
     weight = request.POST.get("weight")
     t =request.POST.get("type")
-    #fruits = ""
-    #veggies = ""
+    desc = request.POST.get('description')
+    
     if t == "fruit":
         fruits = True
         veggies = False
@@ -80,6 +83,28 @@ def createPost(request):
     
     #owner = request.session['id']
     image = request.FILES.get('image')
+    print("*************IMAGE ERROR LOOK AT ME************")
+    print(image)
+    if image is None:
+        params = {
+            'produce_name':produce_name,
+            'weight':float(weight),
+            'fruits':fruits,
+            'veggies':veggies,
+            'owner':PublicUser.objects.get(id=request.session['id']),
+            'description':desc
+        }
+    else:
+        params = {
+
+            'produce_name':produce_name,
+            'weight':float(weight),
+            'fruits':fruits,
+            'veggies':veggies,
+            'owner':PublicUser.objects.get(id=request.session['id']),
+            'image':image,
+            'description':desc
+        }
 
     ##################################
     # # FOR DEBUGGING
@@ -92,14 +117,7 @@ def createPost(request):
     ##################################
 
     try: 
-        new = Produce.objects.create(
-            produce_name=produce_name,
-            weight=float(weight),
-            fruits=fruits,
-            veggies=veggies,
-            owner=PublicUser.objects.get(id=request.session['id']),
-            image=image
-        )
+        new = Produce.objects.create(**params)
     except Exception as e:
         print(e)
         return redirect('/createpost')
@@ -144,13 +162,24 @@ def search(request):
     searchQuery = request.POST.get("search")
     recieving = True if request.POST.get("recieving") == 'on' else False
     
-    fruits = True if request.POST.get("fruit") == 'on' else False
-    veggies = True if request.POST.get("vegetable") == 'on' else False
+    prodType = request.POST.get('type')
+
+    if prodType == 'fruit':
+        fruits = True
+        veggies = False
+    elif prodType is None:
+        fruits = True
+        veggies = True
+    else:
+        fruits = False
+        veggies = True
+    
     distance = 0
+
     try:
         distance = int(request.POST.get("dist"))
     except:
-        distance = 1000
+        distance = 4294967295
     
     prodlist = Search.getLocalProduce(user, searchQuery, fruits, veggies, distance, recieving)
     print(prodlist)
@@ -244,10 +273,12 @@ def createChat(request):
     user1 = users[0]
     user2 = users[1]
 
-    print(user1.username)
-    print(user2.username)
-    Chat.objects.create(user1=user1, user2=user2)
-    return redirect('/messages')
+    if user1 == user2: return redirect("/landing")
+    
+    try:
+        Chat.objects.create(user1=user1, user2=user2)
+    finally:
+        return redirect('/messages')
     
 def createMessage(request):
     chatID = Chat.objects.get(id=request.POST.get('chatID'))
@@ -262,6 +293,42 @@ def createMessage(request):
 
     return redirect('/messages')
     
+def createRequestPage(request):
+    return render(request,'createrequest.html',{})
+
+def createRequest(request):
+    name = request.POST.get('name').lower()
+    weight = request.POST.get('weight')
+    prodType = request.POST.get('type')
+
+    if prodType == 'fruit':
+        fruits = True
+        veggies = False
+    elif prodType is None:
+        fruits = True
+        veggies = True
+    else:
+        fruits = False
+        veggies = True
+
+
+    ProduceRequest.objects.create(
+        produce_name = name,
+        weight=weight,
+        owner=PublicUser.objects.get(id=request.session['id']),
+        fruits=fruits,
+        veggies=veggies,
+    )
+
+    return redirect('/landing')
+
+def manageRequestPage(request):
+    user = PublicUser.objects.get(id=request.session['id'])
+    prodList = ProduceRequest.objects.filter(owner=user)
+    context = {
+        'req':prodList
+    }
+    return render(request,'test/testmanagerequest.html',context)
 
 # # TEST METHODS
 # def test_home(request):
