@@ -38,7 +38,7 @@
 							<a class="nav-link" href="manage">Manage Posts</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="requests.html">Manage Requests</a>
+							<a class="nav-link" href="testmanagerequests">Manage Requests</a>
 						</li>
 						
 						<li class="nav-item">
@@ -74,10 +74,10 @@
 			  <!--<button class="flex-grow-1 btn btn-primary" id="btn-fruit" type="submit">Fruit</button>
 			  <button class="flex-grow-1 btn btn-primary" id="btn-vegetable" type="submit">Vegetable</button>-->
 			  
-			  <input type="radio" class="btn-check" name ="fruit" id="btn-fruit" autocomplete="off">
+			  <input type="radio" class="btn-check" name ="type" id="btn-fruit" autocomplete="off" value='fruit'>
 			  <label class="align-self-center  btn btn-outline-success" for="btn-fruit">Fruit</label><br>
 			  
-			  <input type="radio" class="btn-check" name="vegetable" id="btn-veg" autocomplete="off">
+			  <input type="radio" class="btn-check" name="type" id="btn-veg" autocomplete="off" value='veg'>
 			  <label class="align-self-center  btn btn-outline-success" for="btn-veg">Vegetable</label><br>
 			  
 			  <select class="align-self-center w-25 form-select" aria-label="Default select example" name="dist">
@@ -132,12 +132,11 @@
 			 </div>
 				-->
 
-      		</form>
-			  <form class="d-flex column-3" action='/testpostpage'>
+			<form class="d-flex column-3" action='/createpost'>
 				<button class="btn btn-primary" type="submit">Donate</button>
 			</form>
 			
-			<form class="d-flex column-3">
+			<form class="d-flex column-3" action='/createrequest'>
 				<button class="btn btn-primary" type="submit">Request</button>
 			</form>
 			
@@ -161,40 +160,15 @@
 			  <div class="modal-body">
 				  <div class="row">
 					  <div class="col">
-							  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-							<!-- <div class="carousel-indicators">
-							  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-							  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-							  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-							</div> -->
-							<div class="carousel-inner">
-							  <div class="carousel-item active">
-								<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-							  </div>
-							  <div class="carousel-item">
-								<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-							  </div>
-							  <div class="carousel-item">
-								<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-							  </div>
-							</div>
-							<button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-							  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							  <span class="visually-hidden">Previous</span>
-							</button>
-							<button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-							  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-							  <span class="visually-hidden">Next</span>
-							</button>
-						  </div>
+						<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
 					  </div>
 					  <div class="col">
-							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}
-						  </div>
-					</div>
+							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}</p>
+					  </div>
+				  </div>
 				  <div class="row">
 						<p>[Description]</p>
-					</div>
+				  </div>
 			  </div>
 			  <div class="modal-footer">
 				<svg class="bd-placeholder-img rounded-circle" width="50" height="50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Profile Picture</title><rect width="100%" height="100%" fill="#777"/></svg>
@@ -211,6 +185,7 @@
 			</div>
 		  </div>
 		</div>
+		{% endfor %}
 		
 			
 
@@ -218,7 +193,9 @@
 		<!-- use Modal for pop-up when clicking on a post, use Cards for the content (picture with text) -->
 		<!-- Produce grid -->
 		<div class="container d-grid">
-			<div class="row">			
+			<div class="row">
+			{% for i in searchQuery %}		
+			{% if forloop.counter|divisible:3 %}	
 				<div class="col-lg-4 col-md-4 col-sm-12">
 					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
 						<img src="{{i.image.url}}" class="card-image-top" alt = "" >
@@ -227,53 +204,23 @@
 						</div>
 					</div>
 				</div>
-			</div> <!-- remove this line if you want to uncomment the below code -->
-				<!-- <div class="col-lg-4 col-md-4 col-sm-12">
-					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
-						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
-						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
-						</div>
-					</div>	
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-12">
-					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
-						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
-						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
-						</div>
+			{% if not forloop.last %}
+			<div class="row">
+			{% endif %}
+			{% else %}
+			<div class="col-lg-4 col-md-4 col-sm-12">
+				<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
+					<img src="{{i.image.url}}" class="card-image-top" alt = "" >
+					<div class="card-body">
+						<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}<br>[Distance]</p>
 					</div>
 				</div>
 			</div>
-			<div class="row">			
-				<div class="col-lg-4 col-md-4 col-sm-12">
-					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
-						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
-						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-12">
-					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
-						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
-						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
-						</div>
-					</div>	
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-12">
-					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
-						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
-						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
-						</div>
-					</div>
-				</div>
-			</div> 
-		</div>
-		{% endfor %}
-		
+			{% endif %}
+			{% endfor %}	
+			</div>
+		</div> 
+
 		<!-- Footer -->
 		<footer class="page-footer">
 			<div class="container">

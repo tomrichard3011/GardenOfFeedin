@@ -13,8 +13,11 @@ urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('authenticate', views.authenticate, name='authenticate'),
     path('signout', views.signout, name='signout'),
-    
+    path('createpost', views.createPostPage, name='createpost'),
+    path('createrequest', views.createRequestPage, name='createrequestpage'),
+    path('makerequest', views.createRequest, name='createrequest'), 
     # TEST URLS
+    path('testmanagerequests', views.manageRequestPage, name='mrp'),
     path('testpostpage', views.createPostPage, name='cpp'),
     path('testpost', views.createPost, name='createpost'),
     path('profile', views.profile, name='testprofile'),

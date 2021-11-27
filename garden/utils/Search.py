@@ -30,15 +30,14 @@ miles = number
 def getLocalProduce(currUser, searchQuery, fruits, veggies, miles, recieving):
     nearbyUsers = getLocalUsers(currUser, miles)
     nearbyProduce = []
+
+    searchQuery = searchQuery.lower()
     
     # decide with database to search through if user is giving or recieving
-    if (recieving == True):
+    if recieving:
         databaseToSearch = Produce
     else:
         databaseToSearch = ProduceRequest
-
-
-
 
     for user in nearbyUsers:
         if ((not fruits and not veggies) or (fruits and veggies)):
@@ -47,8 +46,9 @@ def getLocalProduce(currUser, searchQuery, fruits, veggies, miles, recieving):
             param = {'owner':user, "fruits":fruits, "veggies":veggies}
         
         produce_query_set = databaseToSearch.objects.filter(**param).all()
+        print(produce_query_set)
         for produce in produce_query_set:
-            if produce is not None and (searchQuery in produce.produce_name or produce.produce_name in searchQuery):
+            if produce is not None and (searchQuery in produce.produce_name.lower() or produce.produce_name.lower() in searchQuery):
                 nearbyProduce.append(produce)
 
     return nearbyProduce
