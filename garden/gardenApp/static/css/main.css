@@ -158,6 +158,15 @@ body {
     border: none;
 }
 
+/* Styling tables for requests */
+.container {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+.tablecontent {
+	margin-top: 15px; 
+	margin-bottom: 0px;
+}
 
 /* To remove blue highlight */
 .noSelect {
@@ -195,4 +204,6 @@ body {
     .features {
         margin: 0;
     }
+}
+.d-flex {
 }
