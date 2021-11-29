@@ -7,7 +7,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="./../static/css/main.css">
 		
-		<title>Manage Posts</title>
+		<title>Messenger</title>
 		
 		<!-- Required meta tags -->
         <meta charset="utf-8">
@@ -52,55 +52,16 @@
 		</nav>
 		
 		<!-- Welcome Bar -->
-		<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86; margin-bottom: 15px;">
+		<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86;">
 			<div class="welcome">
- 			 <h3>Delete and edit your posts here</h3>
+ 			 <h3>Messages</h3>
 			</div>
 		</nav>
 		
-		
-		<!-- Button trigger modal -->
-		<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#popup">
-            Launch demo modal
-          </button> -->
+		<!-- TODO -->
 
-		  
-		
-		
-		
-		<!-- use Modal for pop-up when clicking on a post, use Cards for the content (picture with text) -->
-		<!-- Produce grid -->
-		<div class="container d-grid">
-			<div class="row">
-			{% for i in produce %}		
-				{% if forloop.counter|divisibleby:3 %}	
-				<div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-					<div class="card h-100 w-100" style="margin-bottom: 50px;">
-						<!-- <a href='/donation/{{i.id}}'><img src="{{i.image.url}}" class="card-image-top" alt = "" ></a> -->
-						<img class="card-image-top h-75 w-75 align-self-center align-items-stretch" src="{{i.image.url}}" alt = "" >
-						<div class="card-body">
-							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}</p>
-							<a href='/donation/{{i.id}}' class="stretched-link"></a>
-						</div>
-					</div>
-				</div>
-				{% if not forloop.last %}
-				{% endif %}
-				{% else %}
-				<div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-					<div class="card h-100 w-100" style="margin-bottom: 50px;">
-						<img src="{{i.image.url}}" class="card-image-top" alt = "" >
-						<div class="card-body">
-							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}</p>
-							<a href='/donation/{{i.id}}' class="stretched-link"></a>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-			{% endfor %}	
-			</div>
-		</div> 
-		
+
+
 		<!-- Footer -->
 		<footer class="page-footer">
 			<div class="container">

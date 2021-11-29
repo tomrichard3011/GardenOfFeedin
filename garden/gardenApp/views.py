@@ -3,9 +3,14 @@ from gardenApp.models import *
 from utils.Geo import *
 from utils.Authentication import *
 from utils import Search
+import datetime
 
 def home(request):
-    return render(request, 'homepage.html')
+    try:
+        request.session['id']
+        return redirect('landing')
+    except:
+        return render(request, 'homepage.html')
 
 
 def signup(request):
@@ -44,7 +49,6 @@ def createUser(request):
         latitude=location.latitude,
         longitude=location.longitude
         )
-        print(new)
     except Exception as e:
         print(str(e))
         return redirect('/signup')
@@ -83,8 +87,6 @@ def createPost(request):
     
     #owner = request.session['id']
     image = request.FILES.get('image')
-    print("*************IMAGE ERROR LOOK AT ME************")
-    print(image)
     if image is None:
         params = {
             'produce_name':produce_name,
@@ -106,16 +108,6 @@ def createPost(request):
             'description':desc
         }
 
-    ##################################
-    # # FOR DEBUGGING
-    # print(produce_name)
-    # print(weight)
-    # print(fruits)
-    # print(veggies)
-    # print(owner)
-    # print(image)
-    ##################################
-
     try: 
         new = Produce.objects.create(**params)
     except Exception as e:
@@ -124,6 +116,8 @@ def createPost(request):
     
     return redirect('/landing')
 
+
+
 def landing(request):
     id = -1
     try:
@@ -131,10 +125,11 @@ def landing(request):
     except:
         return redirect("/")
     user = PublicUser.objects.get(id=id)
-    prod = Produce.objects.all()
+    prod = Produce.objects.filter(donated=False)
     context = {
         'username': user.username,
-        'searchQuery': prod
+        'searchQuery': prod,
+        'recieving' : True
     }
     print('{} is logged in'.format(user.username))
     return render(request, 'landing.html', context)
@@ -157,7 +152,6 @@ def search(request):
     id = request.session['id']
     user = PublicUser.objects.get(id=id)
     
-    print(request.POST)
 
     searchQuery = request.POST.get("search")
     recieving = True if request.POST.get("recieving") == 'on' else False
@@ -168,8 +162,8 @@ def search(request):
         fruits = True
         veggies = False
     elif prodType is None:
-        fruits = True
-        veggies = True
+        fruits = False
+        veggies = False
     else:
         fruits = False
         veggies = True
@@ -184,8 +178,11 @@ def search(request):
     prodlist = Search.getLocalProduce(user, searchQuery, fruits, veggies, distance, recieving)
     print(prodlist)
     context = {
-        'name' : user.username,
-        'searchQuery': prodlist
+        'username' : user.username,
+        'searchQuery': prodlist,
+        'fruits'  : fruits,
+        'veggies' : veggies,
+        'recieving' : recieving
     }
 
     return render(request, 'landing.html', context)
@@ -206,10 +203,12 @@ def authenticate(request):
 
 def profile(request):
     user = PublicUser.objects.get(id=request.session['id'])
+    donations = Search.getAllUserDonations(user)
     context = {
-        'user' : user
+        'user' : user,
+        'donations' : donations
     }
-    return render(request, 'test/testprofile.html',context)
+    return render(request, 'profile.html',context)
 
 def changeProfileImage(request):
     image = request.FILES.get('image')
@@ -221,23 +220,19 @@ def changeProfileImage(request):
     return redirect('/profile')
 
 def manage(request):
-    print("HERE")
-    prod = Produce.objects.filter(owner=PublicUser.objects.get(id=request.session['id']))
-    prod = list(prod)
-    print(prod)
+    prod = Produce.objects.filter(owner=PublicUser.objects.get(id=request.session['id'])).exclude(donated=True).all()
     context = {
         'produce':prod
     }
-    return render(request, 'test/testmanage.html', context)
+    return render(request, 'posts.html', context)
 
 
 def donation(request, id):
     prod = Produce.objects.get(id=id)
-    print(prod)
     context = {
         'prod': prod
     }
-    return render(request, 'test/testdonation.html', context)
+    return render(request, 'editpost.html', context)
 
 def editDonation(request, id):
     print(request.POST)
@@ -246,8 +241,27 @@ def editDonation(request, id):
         prod.produce_name = request.POST.get('name')
     if request.POST.get('weight') != '':
         prod.weight = request.POST.get('weight')
+    if request.POST.get('description') != '':
+        prod.description = request.POST.get('description')
+    prodType = request.POST.get('type')
+    
+    if prodType == 'fruit':
+        prod.fruits = True
+        prod.veggies = False
+    elif prodType == 'veg':
+        prod.fruits = False
+        prod.veggies = True
+
+    if request.FILES.get('image') is not None:
+        prod.image = request.FILES.get('image')
+    
+    prod.date_created = datetime.datetime.now()
     prod.save()
     return redirect('/donation/{0}'.format(id))
+
+def deleteDonation(request, id):
+    Produce.objects.get(id=id).delete()
+    return redirect('/landing')
 
 def messages(request):
     user = PublicUser.objects.get(id=request.session['id'])
@@ -298,7 +312,7 @@ def createRequestPage(request):
 
 def createRequest(request):
     name = request.POST.get('name').lower()
-    weight = request.POST.get('weight')
+    weight = float(request.POST.get('weight'))
     prodType = request.POST.get('type')
 
     if prodType == 'fruit':
@@ -328,7 +342,47 @@ def manageRequestPage(request):
     context = {
         'req':prodList
     }
-    return render(request,'test/testmanagerequest.html',context)
+    return render(request,'requests.html',context)
+
+def editRequestPage(request, id):
+    prod = ProduceRequest.objects.get(id=id)
+    context = {
+        'req':prod
+    }
+    return render(request,'editRequest.html', context)
+
+def editRequest(request, id):
+    prod = ProduceRequest.objects.get(id=id)
+
+    if request.POST.get('name'):
+        prod.produce_name = request.POST.get('name')
+    if request.POST.get('weight'):
+        prod.weight = float(request.POST.get('weight'))
+
+    prodType = request.POST.get('type')
+    if prodType == 'fruit':
+        prod.veggies = False
+        prod.fruits = True
+    elif prodType == 'veg':
+        prod.veggies = True
+        prod.fruits = False
+        
+    prod.save()
+    return redirect('/request/{0}'.format(id))
+
+def deleteRequest(request, id):
+    prod = ProduceRequest.objects.get(id=id).delete()
+    return redirect('/managerequests')
+
+def markAsDonated(request,id):
+    produce = Produce.objects.get(id=id)
+    produce.donated = True
+    produce.save()
+
+    Donation.objects.create(produce_id=produce)
+
+    return redirect("/landing")
+
 
 # # TEST METHODS
 # def test_home(request):

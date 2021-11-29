@@ -36,14 +36,16 @@ def getLocalProduce(currUser, searchQuery, fruits, veggies, miles, recieving):
     # decide with database to search through if user is giving or recieving
     if recieving:
         databaseToSearch = Produce
+        param = {'donated':False}
     else:
         databaseToSearch = ProduceRequest
+        param = {}
 
     for user in nearbyUsers:
         if ((not fruits and not veggies) or (fruits and veggies)):
-            param = {'owner':user}
+            param.update({'owner':user})
         else:
-            param = {'owner':user, "fruits":fruits, "veggies":veggies}
+            param.update({'owner':user, "fruits":fruits, "veggies":veggies})
         
         produce_query_set = databaseToSearch.objects.filter(**param).all()
         print(produce_query_set)
@@ -60,3 +62,10 @@ def getAllChatsForUser(currUser):
 def getAllMessagesInChat(chat):
     msgList = list(Message.objects.filter(chatID=chat))
     return sorted(msgList, key=lambda x: x.dateTime)
+
+
+def getAllUserDonations(currUser):
+    allDonations = Produce.objects.filter(owner=currUser, donated=True).all()
+    return allDonations
+
+
