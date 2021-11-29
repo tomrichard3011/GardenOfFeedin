@@ -27,7 +27,7 @@ class Produce(models.Model):
     date_created = models.DateField(auto_now_add=True)  # date time
     image = models.ImageField(upload_to="produce_images", default="produce_images/default_produce.jpg")
     description = models.TextField(null=True)
-    # donated = models.BooleanField(default=False)
+    donated = models.BooleanField(default=False)
 
 
     def __repr__(self):
@@ -44,7 +44,7 @@ class Donation(models.Model):
 
 class ProduceRequest(models.Model):
     produce_name = models.CharField(max_length=64)
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
+    weight = models.FloatField()
     owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
     fruits = models.BooleanField()
     veggies = models.BooleanField()
