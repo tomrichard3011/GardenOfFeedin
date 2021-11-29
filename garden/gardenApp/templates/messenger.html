@@ -58,15 +58,76 @@
 			</div>
 		</nav>
 		
-		<!-- TODO -->
+		<!-- Container holding entire chat -->
+		<!-- <div class="container-fluid h-100"> -->
+		<div class="container chat-box d-flex flex-column">
+			<!-- row to hold columns -->
+			<div class="row overflow-auto flex-grow-1 ">
+				<!-- chat list column -->
+				<div class="col-4 chat-list" style="background-color: #9FCF86">
+					<!-- list to hold all users -->
+					<div class="list-group chat-box users" style="margin-top: 15px;  list-style-type: none;">
+						<!-- TODO loop through all chats and populate the list -->
+						 <li class="person">
+							<div class="user">
+								<img src="./../static/img/column-1.jpg" alt="" class="rounded-circle">
+							</div>
+							<p class="chat-info">
+								<span class="name">[Name]</span>
+								<span class="time">[Time]<br></span>
+								<span class="last-chat">[Lastest chat, really long messages will be cut off]</span>
+							</p>
+                        </li>
+						<!-- TODO end for loop here -->
+					</div>
+				</div>
+				
+				<!-- active chat  background-color: #E7F3E1 or white? -->
+				<div class="col-8 active-chat" style="background-color: #E7F3E">
+					<!-- messages -->
+					<div class="message-box chat-container" style="margin-bottom: 5px;">
+						<!-- TODO: start forloop to populate the left and right chats accordingly (using if else to check if they belong to user?) -->
+						<li class="chat-left">
+							<div class="chat-avatar">
+								<img src="./../static/img/column-1.jpg" alt="">
+								<div class="chat-name">[Username of Other]</div>
+							</div>
+							<div class="chat-text">[Message from Other User on Left]</div>
+							<div class="chat-hour">[Time of Message]</div>
+						</li>
+						
+						<li class="chat-right">
+							<div class="chat-hour">[Time of Message]</div>
+							<div class="chat-text">[Message from Current User on Right]</div>
+							<div class="chat-avatar">
+								<img src="./../static/img/column-1.jpg" alt="">
+								<div class="chat-name">[Username of User]</div>
+							</div>
+						</li>
+						<!-- TODO: end for loop here -->
+					</div>
+					
+					<!-- user input -->
+					<div class="row g-3">
+						<div class="form-group mt-3 mb-0">
+							<textarea class="form-control" rows="2" placeholder="Type your message here..." style="margin-bottom: 10px; resize: none;"></textarea>
+							<button class="btn btn-primary btn-sm" type="submit">Send</button>
+						</div>
+					</div>
+					 
+				</div>
+			</div>
+		</div>
 
+		
 
-
+		
 		<!-- Footer -->
-		<footer class="page-footer">
+		<!--
+		<footer class="page-footer" style="background-color: #222; color: #ccc; margin-top:0px; padding:0px 0 0px">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-8 col-md-8 col-sm-12">
+			<!--		<div class="col-lg-8 col-md-8 col-sm-12">
 						<h6 class="text-uppercase font-weight-bold">Additional Information</h6>
 						<p>Disclaimers: ...</p>
 						<p>... [Add link to a Privacy Policy and ToS?]</p>
@@ -77,11 +138,12 @@
 					<br/>companyemail@website.com
 					<br/>+ 01 234 567 88
 					<br/>+ 01 234 567 89</p>
+				</div> --
+					<div class="footer-copyright text-center align-bottom" style="margin-bottom: 0px; padding: 40px 0;">© 2021 Copyright: GardenOfFeedin.com</div>
 				</div>
-					<div class="footer-copyright text-center">© 2021 Copyright: GardenOfFeedin.com</div>
-				</div>
-			</div>
-		</footer>
+			</div> 
+		</footer> 
+		-->
 		
 		
 		

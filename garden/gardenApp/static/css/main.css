@@ -168,6 +168,207 @@ body {
 	margin-bottom: 0px;
 }
 
+/* CHAT */
+.container-xxl {
+	margin: 15px;
+}
+.chat-box {
+	margin: 15px;
+	padding-right: 0px;
+    padding-left: 0px;
+    margin-right: auto;
+    margin-left: auto;
+	
+	height:490px; /* 425 if including footer */
+	width:100%;
+}
+.chat-list {
+	height:100%;
+	
+	overflow-y: scroll;
+}
+.active-chat {
+	padding-top: 19px;
+	padding-bottom:10px;
+	padding-right: 10px;
+    padding-left: 10px;
+    margin-right: auto;
+    margin-left: auto;
+	
+	display:table;
+	height:490px; /* 425 if including footer */
+}
+.message-box {
+	height:75%; /* 75% if including footer */
+	
+	overflow-y: scroll;
+}
+.list-group button {
+	background-color: #E7F3E1;
+}
+.list-group button:hover {
+	background-color: #6ab446;
+}
+/* Adapted from https://www.bootdey.com/snippets/view/bs4-simple-chat-app#preview */
+.users {
+    padding: 0;
+}
+.users .person {
+    position: relative;
+    width: 100%;
+    padding: 10px 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #6ab446;
+}
+
+.users .person:hover {
+    background-color: #E7F3E1;
+}
+
+.users .person:active {
+    background-color: #6AB446;
+}
+.users .person:checked {
+	background-color: #6AB446;
+}
+.users .person:last-child {
+    border-bottom: 0;
+}
+
+.users .person .user {
+    display: inline-flex;
+    position: relative;
+    margin-right: 0px;
+}
+
+.users .person .user img {
+    width: 48px;
+    height: 48px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+.users .person p.chat-info {
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.users .person p.chat-info .time {
+    font-weight: 400;
+    font-size: .7rem;
+    text-align: left;
+    color: #656565;
+}
+.users .person p.chat-info .last-chat {
+    font-weight: 400;
+    font-size: .85rem;
+    text-align: left;
+    color: #5F5B55;
+	
+	/* To display the first few characters then ellipsis */
+	display: block;
+	width: 250px;
+	overflow: hidden;
+  	white-space: nowrap;
+  	text-overflow: ellipsis;
+}
+
+/* Adapted from https://www.bootdey.com/snippets/view/bs4-simple-chat-app#preview */
+.chat-container {
+    position: relative;
+    padding: 0.25rem;
+}
+
+.chat-container li.chat-left,
+.chat-container li.chat-right {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    margin-bottom: 35px;
+}
+
+.chat-container li img {
+    width: 48px;
+    height: 48px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+}
+
+.chat-container li .chat-avatar {
+    margin-right: 20px;
+}
+
+.chat-container li.chat-right {
+    justify-content: flex-end;
+}
+
+.chat-container li.chat-right > .chat-avatar {
+    margin-left: 20px;
+    margin-right: 0;
+}
+
+.chat-container li .chat-name {
+    font-size: .75rem;
+    color: #999999;
+    text-align: center;
+}
+
+.chat-container li .chat-text {
+    padding: .4rem 1rem;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: #ffffff;
+    font-weight: 300;
+    line-height: 150%;
+    position: relative;
+}
+
+.chat-container li .chat-text::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 10px;
+    left: -20px;
+    border: 10px solid;
+    border-color: transparent #ffffff transparent transparent;
+}
+
+.chat-container li.chat-right > .chat-text {
+    text-align: right;
+}
+
+.chat-container li.chat-right > .chat-text:before {
+    right: -20px;
+    border-color: transparent transparent transparent #ffffff;
+    left: inherit;
+}
+
+.chat-container li .chat-hour {
+    padding: 0;
+    margin-bottom: 10px;
+    font-size: .75rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 0 15px;
+}
+
+.chat-container li .chat-hour > span {
+    font-size: 16px;
+    color: #9ec94a;
+}
+
+.chat-container li.chat-right > .chat-hour {
+    margin: 0 15px 0 0;
+}
+
+
+
 /* To remove blue highlight */
 .noSelect {
     -webkit-tap-highlight-color: transparent;
