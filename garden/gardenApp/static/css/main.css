@@ -168,6 +168,15 @@ body {
 	margin-bottom: 0px;
 }
 
+/* User profile in modal */
+.user-in-modal {
+    width: 48px;
+    height: 48px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+
 /* CHAT */
 .container-xxl {
 	margin: 15px;
@@ -209,7 +218,7 @@ body {
 .list-group button:hover {
 	background-color: #6ab446;
 }
-/* Adapted from https://www.bootdey.com/snippets/view/bs4-simple-chat-app#preview */
+/* LEFT Adapted from https://www.bootdey.com/snippets/view/bs4-simple-chat-app#preview */
 .users {
     padding: 0;
 }
@@ -274,7 +283,7 @@ body {
   	text-overflow: ellipsis;
 }
 
-/* Adapted from https://www.bootdey.com/snippets/view/bs4-simple-chat-app#preview */
+/* RIGHT Adapted from https://www.bootdey.com/snippets/view/bs4-simple-chat-app#preview */
 .chat-container {
     position: relative;
     padding: 0.25rem;
