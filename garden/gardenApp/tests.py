@@ -29,11 +29,9 @@ class databaseTest(TestCase):
         )
         Donation.objects.create(
             produce_id=banana,
-            reciever=john
         )
-        ProduceAlert.objects.create(
-            produce_id=banana,
-        )
+        
+
 
     def test_publicUser(self):
         john = PublicUser.objects.get(email="john@doe.com")
@@ -55,13 +53,10 @@ class databaseTest(TestCase):
         self.assertEqual(banana.owner, PublicUser.objects.get(email="john@doe.com"))
 
     def test_donation(self):
-        donation = Donation.objects.get(reciever=PublicUser.objects.get(username="username"))
+        bananas = Produce.objects.get(produce_name="bananas")
+        donation = Donation.objects.get(produce_id=bananas)
         self.assertEqual(donation.produce_id, Produce.objects.get(produce_name="bananas"))
-        self.assertEqual(donation.reciever, PublicUser.objects.get(username="username"))
-
-    def test_produceAlert(self):
-        alert = ProduceAlert.objects.get(produce_id=Produce.objects.get(produce_name="bananas"))
-        self.assertEqual(alert.date_created, date.today())
+        
 
     def test_existingEmail(self):
         with self.assertRaises(Exception) as context:
@@ -195,20 +190,11 @@ class searchFunction(TestCase):
         john = PublicUser.objects.get(email="john@doe.com")
         produce_list = list(Produce.objects.filter(produce_name="bananas"))
 
-        self.assertEqual(produce_list, getLocalProduce(john, "banana", True, False, 1))
+        self.assertEqual(produce_list, getLocalProduce(john, "banana", True, False, 1, True))
 
     def test_noResultSearch(self):
         john = PublicUser.objects.get(email="john@doe.com")
-        self.assertEqual([], getLocalProduce(john, "does not exist", False, True, 1))
-
-# TODO Test links
-# internal link
-# external links
-
-# TODO Forms
-# field validation
-# error message
-# optional and mandatory fields
+        self.assertEqual([], getLocalProduce(john, "does not exist", False, True, 1, True))
 
 class clientTest(TestCase):
     def setUp(self):

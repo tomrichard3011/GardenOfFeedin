@@ -2,10 +2,15 @@ from django.shortcuts import render, redirect
 from gardenApp.models import *
 from utils.Geo import *
 from utils.Authentication import *
-
+from utils import Search
+import datetime
 
 def home(request):
-    return render(request, 'homepage.html')
+    try:
+        request.session['id']
+        return redirect('landing')
+    except:
+        return render(request, 'homepage.html')
 
 
 def signup(request):
@@ -18,14 +23,15 @@ def createUser(request):
     pw = request.POST.get("password")
     address = request.POST.get("address")
     email = request.POST.get("email")
-
+    
     # hash password
     pw = hashPassword(pw)
 
     #TODO handle bad address
     try:
         location = addressToCoordinates(address)
-    except:
+    except Exception as e:
+        print(str(e))
         return redirect("/signup")
 
     # create user
@@ -43,7 +49,8 @@ def createUser(request):
         latitude=location.latitude,
         longitude=location.longitude
         )
-    except:
+    except Exception as e:
+        print(str(e))
         return redirect('/signup')
 
     # context = {
@@ -63,14 +70,14 @@ def createUser(request):
 # just wrote a quick fix
 
 def createPostPage(request):
-    return render(request, 'test/testpost.html', {})
+    return render(request, 'createpost.html', {})
 
 def createPost(request):
-    produce_name = request.POST.get("name")
+    produce_name = request.POST.get("name").lower()
     weight = request.POST.get("weight")
     t =request.POST.get("type")
-    #fruits = ""
-    #veggies = ""
+    desc = request.POST.get('description')
+    
     if t == "fruit":
         fruits = True
         veggies = False
@@ -78,33 +85,38 @@ def createPost(request):
         fruits = False
         veggies = True
     
-    owner = request.session['id']
+    #owner = request.session['id']
     image = request.FILES.get('image')
+    if image is None:
+        params = {
+            'produce_name':produce_name,
+            'weight':float(weight),
+            'fruits':fruits,
+            'veggies':veggies,
+            'owner':PublicUser.objects.get(id=request.session['id']),
+            'description':desc
+        }
+    else:
+        params = {
 
-    ##################################
-    # # FOR DEBUGGING
-    # print(produce_name)
-    # print(weight)
-    # print(fruits)
-    # print(veggies)
-    # print(owner)
-    # print(image)
-    ##################################
+            'produce_name':produce_name,
+            'weight':float(weight),
+            'fruits':fruits,
+            'veggies':veggies,
+            'owner':PublicUser.objects.get(id=request.session['id']),
+            'image':image,
+            'description':desc
+        }
 
     try: 
-        new = Produce.objects.create(
-            produce_name=produce_name,
-            weight=float(weight),
-            fruits=fruits,
-            veggies=veggies,
-            owner=PublicUser.objects.get(id=owner),
-            image=image
-        )
+        new = Produce.objects.create(**params)
     except Exception as e:
         print(e)
         return redirect('/createpost')
     
     return redirect('/landing')
+
+
 
 def landing(request):
     id = -1
@@ -113,9 +125,13 @@ def landing(request):
     except:
         return redirect("/")
     user = PublicUser.objects.get(id=id)
+    prod = Produce.objects.filter(donated=False)
     context = {
         'username': user.username,
+        'searchQuery': prod,
+        'recieving' : True
     }
+    print('{} is logged in'.format(user.username))
     return render(request, 'landing.html', context)
 
 
@@ -132,6 +148,44 @@ def signout(request):
         pass
     # TODO Handle hack3rs
 
+def search(request):
+    id = request.session['id']
+    user = PublicUser.objects.get(id=id)
+    
+
+    searchQuery = request.POST.get("search")
+    recieving = True if request.POST.get("recieving") == 'on' else False
+    
+    prodType = request.POST.get('type')
+
+    if prodType == 'fruit':
+        fruits = True
+        veggies = False
+    elif prodType is None:
+        fruits = False
+        veggies = False
+    else:
+        fruits = False
+        veggies = True
+    
+    distance = 0
+
+    try:
+        distance = int(request.POST.get("dist"))
+    except:
+        distance = 4294967295
+    
+    prodlist = Search.getLocalProduce(user, searchQuery, fruits, veggies, distance, recieving)
+    print(prodlist)
+    context = {
+        'username' : user.username,
+        'searchQuery': prodlist,
+        'fruits'  : fruits,
+        'veggies' : veggies,
+        'recieving' : recieving
+    }
+
+    return render(request, 'landing.html', context)
 
 # TODO handle nonexistent user/bad login info
 # AKA username/password incorrect
@@ -146,6 +200,188 @@ def authenticate(request):
         return response
     response = redirect('/signin')
     return response
+
+def profile(request):
+    user = PublicUser.objects.get(id=request.session['id'])
+    donations = Search.getAllUserDonations(user)
+    context = {
+        'user' : user,
+        'donations' : donations
+    }
+    return render(request, 'profile.html',context)
+
+def changeProfileImage(request):
+    image = request.FILES.get('image')
+    user = PublicUser.objects.get(id=request.session['id'])
+    user.image = image
+    ##TODO delete previous image
+
+    user.save()
+    return redirect('/profile')
+
+def manage(request):
+    prod = Produce.objects.filter(owner=PublicUser.objects.get(id=request.session['id'])).exclude(donated=True).all()
+    context = {
+        'produce':prod
+    }
+    return render(request, 'posts.html', context)
+
+
+def donation(request, id):
+    prod = Produce.objects.get(id=id)
+    context = {
+        'prod': prod
+    }
+    return render(request, 'editpost.html', context)
+
+def editDonation(request, id):
+    print(request.POST)
+    prod = Produce.objects.get(id=id)
+    if request.POST.get('name') != '':
+        prod.produce_name = request.POST.get('name')
+    if request.POST.get('weight') != '':
+        prod.weight = request.POST.get('weight')
+    if request.POST.get('description') != '':
+        prod.description = request.POST.get('description')
+    prodType = request.POST.get('type')
+    
+    if prodType == 'fruit':
+        prod.fruits = True
+        prod.veggies = False
+    elif prodType == 'veg':
+        prod.fruits = False
+        prod.veggies = True
+
+    if request.FILES.get('image') is not None:
+        prod.image = request.FILES.get('image')
+    
+    prod.date_created = datetime.datetime.now()
+    prod.save()
+    return redirect('/donation/{0}'.format(id))
+
+def deleteDonation(request, id):
+    Produce.objects.get(id=id).delete()
+    return redirect('/landing')
+
+def messages(request):
+    user = PublicUser.objects.get(id=request.session['id'])
+    chats = Search.getAllChatsForUser(user)
+    context = {}
+    allUserMsgs = []
+    for chat in chats:
+        allmsgs = Search.getAllMessagesInChat(chat)
+        allUserMsgs.extend(allmsgs)
+        
+    context['chats'] = chats
+    context['allmsgs'] = allUserMsgs
+    print(context)
+    return render(request,'test/testmessages.html',context)
+
+def createChat(request):
+    users = [
+        PublicUser.objects.get(id=request.session['id']),
+        PublicUser.objects.get(id=request.POST.get('user'))
+    ]
+
+    users.sort(key=lambda x: x.username)
+    user1 = users[0]
+    user2 = users[1]
+
+    if user1 == user2: return redirect("/landing")
+    
+    try:
+        Chat.objects.create(user1=user1, user2=user2)
+    finally:
+        return redirect('/messages')
+    
+def createMessage(request):
+    chatID = Chat.objects.get(id=request.POST.get('chatID'))
+    user = PublicUser.objects.get(id=request.session['id'])
+    msg = request.POST.get('msg')
+
+    Message.objects.create(
+        chatID=chatID,
+        userID=user,
+        msg=msg
+    )
+
+    return redirect('/messages')
+    
+def createRequestPage(request):
+    return render(request,'createrequest.html',{})
+
+def createRequest(request):
+    name = request.POST.get('name').lower()
+    weight = float(request.POST.get('weight'))
+    prodType = request.POST.get('type')
+
+    if prodType == 'fruit':
+        fruits = True
+        veggies = False
+    elif prodType is None:
+        fruits = True
+        veggies = True
+    else:
+        fruits = False
+        veggies = True
+
+
+    ProduceRequest.objects.create(
+        produce_name = name,
+        weight=weight,
+        owner=PublicUser.objects.get(id=request.session['id']),
+        fruits=fruits,
+        veggies=veggies,
+    )
+
+    return redirect('/landing')
+
+def manageRequestPage(request):
+    user = PublicUser.objects.get(id=request.session['id'])
+    prodList = ProduceRequest.objects.filter(owner=user)
+    context = {
+        'req':prodList
+    }
+    return render(request,'requests.html',context)
+
+def editRequestPage(request, id):
+    prod = ProduceRequest.objects.get(id=id)
+    context = {
+        'req':prod
+    }
+    return render(request,'editRequest.html', context)
+
+def editRequest(request, id):
+    prod = ProduceRequest.objects.get(id=id)
+
+    if request.POST.get('name'):
+        prod.produce_name = request.POST.get('name')
+    if request.POST.get('weight'):
+        prod.weight = float(request.POST.get('weight'))
+
+    prodType = request.POST.get('type')
+    if prodType == 'fruit':
+        prod.veggies = False
+        prod.fruits = True
+    elif prodType == 'veg':
+        prod.veggies = True
+        prod.fruits = False
+        
+    prod.save()
+    return redirect('/request/{0}'.format(id))
+
+def deleteRequest(request, id):
+    prod = ProduceRequest.objects.get(id=id).delete()
+    return redirect('/managerequests')
+
+def markAsDonated(request,id):
+    produce = Produce.objects.get(id=id)
+    produce.donated = True
+    produce.save()
+
+    Donation.objects.create(produce_id=produce)
+
+    return redirect("/landing")
 
 
 # # TEST METHODS

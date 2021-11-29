@@ -29,16 +29,16 @@
 				<div class="collapse navbar-collapse" id="main-navigation">
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a class="nav-link" href="profile.html">Profile</a>
+							<a class="nav-link" href="/profile">Profile</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="messenger.html">Messages</a>
+							<a class="nav-link" href="/messages">Messages</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="posts.html">Manage Posts</a>
+							<a class="nav-link" href="/manage">Manage Posts</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="requests.html">Manage Requests</a>
+							<a class="nav-link" href="/managerequests">Manage Requests</a>
 						</li>
 						
 						<li class="nav-item">
@@ -63,52 +63,43 @@
 		<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#popup">
             Launch demo modal
           </button> -->
+
+		  
 		
-		<!-- Modal pop-up -->
-		<div class="modal fade" id="popup" tabindex="-1" aria-labelledby="popupName" aria-hidden="true">
-		  <div class="modal-dialog">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<h5 class="modal-title" id="popupName">[ProduceName]</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			  </div>
-			  <div class="modal-body">
-				  <div class="row">
-					  <div class="col">
-							<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-					  </div>
-					  <div class="col">
-							<p class="card-text">[ProduceName]<br>[Weight]</p>
-						  </div>
-					</div>
-				  <div class="row">
-						<p>[Description]</p>
-					</div>
-			  </div>
-			  <div class="modal-footer">
-				<!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-				<button type="button" class="btn btn-primary">Edit post</button>
-				<button type="button" class="btn btn-primary">Delete post</button>
-			  </div>
-			</div>
-		  </div>
-		</div>
 		
 		
 		<!-- use Modal for pop-up when clicking on a post, use Cards for the content (picture with text) -->
 		<!-- Produce grid -->
 		<div class="container d-grid">
-			<div class="row row-cols-auto">			
-				<div class="col-lg-4 col-md-4 col-sm-12">
-					<div class="card" href="/editpost"> <!-- do what you need to pass in information about the specific post to load into edit post -->
-						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
+			<div class="row">
+			{% for i in produce %}		
+				{% if forloop.counter|divisibleby:3 %}	
+				<div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+					<div class="card h-100 w-100" style="margin-bottom: 50px;">
+						<!-- <a href='/donation/{{i.id}}'><img src="{{i.image.url}}" class="card-image-top" alt = "" ></a> -->
+						<img class="card-image-top h-75 w-75 align-self-center align-items-stretch" src="{{i.image.url}}" alt = "" >
 						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Want to give/want to receive]</p>
+							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}</p>
+							<a href='/donation/{{i.id}}' class="stretched-link"></a>
 						</div>
 					</div>
 				</div>
+				{% if not forloop.last %}
+				{% endif %}
+				{% else %}
+				<div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+					<div class="card h-100 w-100" style="margin-bottom: 50px;">
+						<img src="{{i.image.url}}" class="card-image-top" alt = "" >
+						<div class="card-body">
+							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}</p>
+							<a href='/donation/{{i.id}}' class="stretched-link"></a>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			{% endfor %}	
 			</div>
-		</div>
+		</div> 
 		
 		<!-- Footer -->
 		<footer class="page-footer">

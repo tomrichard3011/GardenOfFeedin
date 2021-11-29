@@ -37,7 +37,7 @@
     
 	<body class="text-center">
 	
-			<!-- Navbar -->
+		<!-- Navbar -->
 	
 		<nav class="navbar navbar-expand-md">
 			<div class="container-fluid"> 
@@ -49,13 +49,16 @@
 				<div class="collapse navbar-collapse" id="main-navigation">
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a class="nav-link" href="profile.html">Profile</a>
+							<a class="nav-link" href="/profile">Profile</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="messenger.html">Messages</a>
+							<a class="nav-link" href="/messages">Messages</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="posts.html">Manage Posts</a>
+							<a class="nav-link" href="/manage">Manage Posts</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/managerequests">Manage Requests</a>
 						</li>
 						
 						<li class="nav-item">
@@ -70,16 +73,28 @@
 		
 		<main>
 			<!-- for image above sign in (branding icon)-->
-			  <svg class="bd-placeholder-img rounded-circle" width="150" height="150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Profile Picture</title><rect width="100%" height="100%" fill="#777"/></svg>
+			<img class="bd-placeholder-img rounded-circle" width="150" height="150" src="{{user.image.url}}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Profile Picture</title><rect width="100%" height="100%" fill="#777"/>
 
-			<h1 class="h3 mb-3 fw-normal">{{ username }}</h1>
+			<h1 class="h3 mb-3 fw-normal">{{ user.username }}</h1>
 			
-			<h1 class="h3 mb-3 fw-normal">{{ email }}</h1>
+			<h1 class="h3 mb-3 fw-normal">{{ user.email }}</h1>
 			
-			<h1 class="h3 mb-3 fw-normal">{{ address }}</h1>
+			<h1 class="h3 mb-3 fw-normal">{{ user.address }}</h1>
 			
 			<!-- comment out this line to remove "Change Password" feature -->
-			<button class="w-50 btn btn-lg btn-primary" type="submit">Change password (optional)</button>
+			<form action = "/changeProfileImage" method="POST" enctype='multipart/form-data'>
+				{% csrf_token %}
+		
+				<label class="align-self-center" for="image">Select a file:</label>
+				<input type="file" id="myfile" name="image" accept="image/*">
+				<br>
+
+				<button class="w-50 btn btn-lg btn-primary" type="submit">Change profile picture</button>
+			</form>
+			
+			{% for i in donations %}
+				<h1 class="h3 mb-3 fw-normal">{{ i.produce_name }}</h1>
+			{% endfor %}
 			
 			
 		</main>

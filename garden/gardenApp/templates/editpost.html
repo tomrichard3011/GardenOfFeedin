@@ -12,8 +12,8 @@
     <title>Edit Post</title>
 </head>
 <body>
-    <!-- Navbar -->
-
+	<!-- Navbar -->
+	
 	<nav class="navbar navbar-expand-md">
 		<div class="container-fluid"> 
 			<a class="navbar-brand" href="/landing">Garden of Feedin'
@@ -24,18 +24,18 @@
 			<div class="collapse navbar-collapse" id="main-navigation">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link" href="profile.html">Profile</a>
+						<a class="nav-link" href="/profile">Profile</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="messenger.html">Messages</a>
+						<a class="nav-link" href="/messages">Messages</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="posts.html">Manage Posts</a>
+						<a class="nav-link" href="/manage">Manage Posts</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="requests.html">Manage Requests</a>
+						<a class="nav-link" href="/managerequests">Manage Requests</a>
 					</li>
-
+					
 					<li class="nav-item">
 						<a href="/signout" class="btn">Sign Out</a>
 						<!-- when you press the button should there be a sign-out.html that confirms signing out? or is going back to the homepage.html enough (of course with the back end signing them out) 
@@ -58,7 +58,7 @@
 		  <form class="form-control" action='/donation/edit/{{prod.id}}' method='POST'>
 			  <div class="row">
 				  <div class="col-6">
-						<svg class="bd-placeholder-img" width="100%" height="100%" src="{{i.image.url}}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>	
+						<img class="bd-placeholder-img" width="100%" height="100%" src="{{prod.image.url}}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/>	
 					  
 					   
 				  </div>
@@ -71,10 +71,20 @@
        				   <input type="text" id="lname" name="weight" placeholder={{prod.weight}} default ={{prod.weight}}><br><br>
 					  
 					   <!-- Add fruit/vegetable type selector -->
-						<input type="radio" class="btn-check" id="3" name="type" value="fruit"  autocomplete="off">
+					    {% if prod.fruits %}
+						<input type="radio" class="btn-check" id="3" name="type" value="fruit"  autocomplete="off" Checked>
 						<label class="align-self-end w-25 btn btn-outline-success" for="3">Fruit</label><br>
 						<input type="radio" class="btn-check" id="4" name="type" value="veg"  autocomplete="off">
 						<label class="align-self-end w-25 btn btn-outline-success" for="4">Vegetable</label><br>
+
+
+						{% else %}
+						<input type="radio" class="btn-check" id="3" name="type" value="fruit"  autocomplete="off">
+						<label class="align-self-end w-25 btn btn-outline-success" for="3">Fruit</label><br>
+						<input type="radio" class="btn-check" id="4" name="type" value="veg"  autocomplete="off" Checked>
+						<label class="align-self-end w-25 btn btn-outline-success" for="4">Vegetable</label><br>
+
+						{% endif %}
 
 				</div>
 			</div>
@@ -84,12 +94,12 @@
 					<input style="margin-right: 150px;" type="file" id="myfile" name="image" accept="image/*">
 				  
 					<label for="description">Description (optional):</label><br>
-					<input class="form-control me-2 w-75" type="text" id="desc" name="description" placeholder="[description]"><br>
+					<input class="form-control me-2 w-75" type="text" id="desc" name="description" placeholder="{{prod.description}}"><br>
 				</div>
 			  
-		
-		<button type="button" class="btn btn-primary">Delete post</button>
-		<button type="button" class="btn btn-primary">Save edits</button>
+		<button type="submit" class="btn btn-primary">Save edits</button>
+		<a href='/donation/delete/{{prod.id}}'><button type="button" class="btn btn-primary">Delete post</button></a>
+		<a href='/donation/donated/{{prod.id}}'><button type="button" class="btn btn-primary">Donated</button></a>
 			  
 		</form>
 		</div>

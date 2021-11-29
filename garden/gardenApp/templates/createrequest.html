@@ -13,38 +13,38 @@
 </head>
 <body>
     <!-- Navbar -->
-
-	<nav class="navbar navbar-expand-md">
-		<div class="container-fluid"> 
-			<a class="navbar-brand" href="/landing">Garden of Feedin'
-			</a>
-			<button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#main-navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="main-navigation">
-				<ul class="navbar-nav">
-					<li class="nav-item">
-						<a class="nav-link" href="profile.html">Profile</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="messenger.html">Messages</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="posts.html">Manage Posts</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="requests.html">Manage Requests</a>
-					</li>
-
-					<li class="nav-item">
-						<a href="/signout" class="btn">Sign Out</a>
-						<!-- when you press the button should there be a sign-out.html that confirms signing out? or is going back to the homepage.html enough (of course with the back end signing them out) 
-						There are 'simple alerts' that I think I can include in the homepage so when signing out, it shows up at the top of the homepage which informs the user of a successful sign out -->
-					</li>
-				</ul>
+	
+		<nav class="navbar navbar-expand-md">
+			<div class="container-fluid"> 
+				<a class="navbar-brand" href="/landing">Garden of Feedin'
+				</a>
+				<button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#main-navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="main-navigation">
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link" href="/profile">Profile</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/messages">Messages</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/manage">Manage Posts</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/managerequests">Manage Requests</a>
+						</li>
+						
+						<li class="nav-item">
+							<a href="/signout" class="btn">Sign Out</a>
+							<!-- when you press the button should there be a sign-out.html that confirms signing out? or is going back to the homepage.html enough (of course with the back end signing them out) 
+							There are 'simple alerts' that I think I can include in the homepage so when signing out, it shows up at the top of the homepage which informs the user of a successful sign out -->
+						</li>
+					</ul>
+				</div>
 			</div>
-		</div>
-	</nav>
+		</nav>
 
 	<!-- Info Bar -->
 	<nav class="navbar-light navbar-expand-md" style="background-color: #9FCF86;">
@@ -53,12 +53,12 @@
 		</div>
 	</nav>
 	<div class="container-fluid form-group">
-		<form class="d-flex align-content-end flex-wrap" action = "/testpost" method="POST" enctype='multipart/form-data'>
+		<form class="d-flex align-content-end flex-wrap" action = "/makerequest" method="POST" enctype='multipart/form-data'>
 			{% csrf_token %}
 			<label for="name">Produce name:</label><br>
 			<input class="form-control me-2 w-150" type="text" id="1" name="name"><br>
 			<label for="weight">Weight:</label><br>
-			<input class="form-control me-2 w-150" type="number" id="2" name="weight"><br>
+			<input class="form-control me-2 w-150" type="float" id="2" name="weight"><br>
 			<input type="radio" class="btn-check" id="3" name="type" value="fruit"  autocomplete="off">
 			<label class="align-self-center w-25 btn btn-outline-success" for="3">Fruit</label><br>
 			<input type="radio" class="btn-check" id="4" name="type" value="veg"  autocomplete="off">

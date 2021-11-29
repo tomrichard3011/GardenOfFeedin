@@ -12,6 +12,24 @@
 		<!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- style for image above sign in (branding icon) -->
+		<style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
+			margin-top: 15px;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+			font-size: 3.5rem;
+			}
+		}		
+		  </style>
       
 	</head>
     
@@ -29,16 +47,16 @@
 				<div class="collapse navbar-collapse" id="main-navigation">
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a class="nav-link" href="profile.html">Profile</a>
+							<a class="nav-link" href="/profile">Profile</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="messenger.html">Messages</a>
+							<a class="nav-link" href="/messages">Messages</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="posts.html">Manage Posts</a>
+							<a class="nav-link" href="/manage">Manage Posts</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="requests.html">Manage Requests</a>
+							<a class="nav-link" href="/managerequests">Manage Requests</a>
 						</li>
 						
 						<li class="nav-item">
@@ -61,31 +79,69 @@
 		<!-- Search bar and filtering options -->
 		<div class="container-fluid form-group ">
 			<div class="row">
-				<form class="d-flex col-8" style="margin-right: 0;">
-					<input class="form-control me-2 w-150" id="search" type="search" placeholder="Type here..." aria-label="Search">
-					<button class="btn btn-primary" style="margin-right: 0px;" type="submit">Search</button>
-				</form>
-				
-				<form class="col-2 col-md-auto" style="margin-left:0px; margin-right: 0px;" action="/posts">
-					<button class="btn btn-primary" type="button">Post</button>
-				</form>
-				<form class="col-2 col-md-auto" action="/posts">
-					<button class="btn btn-primary" style="margin-left:10px; margin-right: 0px;" type="button">Request</button>
+				<form class="d-flex column-3" action='/search' method='POST'>
+					{% csrf_token %}
+					<input class="form-control me-2 w-50" id="search" type="search" placeholder="Type here..." name="search" aria-label="Search">
+					<button class="btn btn-primary" type="submit">Search</button>
+	
+				<h class="align-self-center form-check form-switch">
+					{% if not recieving %}
+					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="recieving" Checked>
+					{% else %}
+					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="recieving">
+					{% endif %}
+					<label class="form-check-label" for="flexSwitchCheckDefault">Want to give / Want to receive</label>
+				</h>
+			  
+			  <!--<button class="flex-grow-1 btn btn-primary" id="btn-fruit" type="submit">Fruit</button>
+			  <button class="flex-grow-1 btn btn-primary" id="btn-vegetable" type="submit">Vegetable</button>-->
+			  {% if fruits %}
+			  <input type="radio" class="btn-check" name ="type" id="btn-fruit" autocomplete="off" value='fruit' Checked>
+			  <label class="align-self-center  btn btn-outline-success" for="btn-fruit">Fruit</label><br>
+			  
+			  <input type="radio" class="btn-check" name="type" id="btn-veg" autocomplete="off" value='veg'>
+			  <label class="align-self-center  btn btn-outline-success" for="btn-veg">Vegetable</label><br>
+
+			  {% elif veggies %}
+			  <input type="radio" class="btn-check" name ="type" id="btn-fruit" autocomplete="off" value='fruit'>
+			  <label class="align-self-center  btn btn-outline-success" for="btn-fruit">Fruit</label><br>
+			  
+			  <input type="radio" class="btn-check" name="type" id="btn-veg" autocomplete="off" value='veg' Checked>
+			  <label class="align-self-center  btn btn-outline-success" for="btn-veg">Vegetable</label><br>
+
+			  {% else %}
+			  <input type="radio" class="btn-check" name ="type" id="btn-fruit" autocomplete="off" value='fruit'>
+			  <label class="align-self-center  btn btn-outline-success" for="btn-fruit">Fruit</label><br>
+			  
+			  <input type="radio" class="btn-check" name="type" id="btn-veg" autocomplete="off" value='veg'>
+			  <label class="align-self-center  btn btn-outline-success" for="btn-veg">Vegetable</label><br>
+			  
+			  {% endif %}
+
+			  <select class="align-self-center w-25 form-select" aria-label="Default select example" name="dist">
+				  <option selected>Distance from you</option>
+				  <option value="5">&lt;5 mi</option>
+				  <option value="10">10 mi</option>
+				  <option value="15">15 mi</option>
+				  <option value="25">25 mi</option>
+				  <option value="35">35 mi</option>
+			  </select>
 				</form>
 			</div>
 
-			<p style="margin-bottom: 0px;">Want to give / Want to receive</p>
-			<form class="d-flex justify-content-center w-65" style="margin-top: 0px; margin-bottom: 20px;">
+
+			<!-- <form class="d-flex justify-content-left w-150">
 				<h class="align-self-center form-check form-switch">
-			  		<input class="form-check-input" style="margin-top: 0; margin-right: 100px;" type="checkbox" id="flexSwitchCheckDefault">
-			  		<label class="form-check-label" for="flexSwitchCheckDefault"></label>
-			  	</h>
+			  		<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+			  		<label class="form-check-label" for="flexSwitchCheckDefault">Want to give / Want to receive</label>
+			  	</h> -->
         		
 				<!--<button class="flex-grow-1 btn btn-primary" id="btn-fruit" type="submit">Fruit</button>
         		<button class="flex-grow-1 btn btn-primary" id="btn-vegetable" type="submit">Vegetable</button>-->
 				
-				<input type="radio" class="btn-check" name ="options" id="btn-fruit" autocomplete="off">
-				<label class="align-self-center w-25 btn btn-outline-success" for="btn-fruit">Fruit</label><br>
+				<!-- <input type="radio" class="btn-check" name ="options" id="btn-fruit" autocomplete="off">
+				<label class="align-self-center  btn btn-outline-success" for="btn-fruit">Fruit</label><br>
+
 				
 				<input type="radio" class="btn-check" name="options" id="btn-veg" autocomplete="off">
 				<label class="align-self-center w-25 btn btn-outline-success" for="btn-veg">Vegetable</label><br>
@@ -97,7 +153,7 @@
 					<option value="15">15 mi</option>
 					<option value="25">25 mi</option>
 					<option value="35">35 mi</option>
-				</select>
+				</select> -->
 
 			<!--
 			<div class="dropdown">
@@ -114,7 +170,13 @@
 			 </div>
 				-->
 
-      		</form>
+			<form class="d-flex column-3" action='/createpost'>
+				<button class="btn btn-primary" type="submit">Donate</button>
+			</form>
+			
+			<form class="d-flex column-3" action='/createrequest'>
+				<button class="btn btn-primary" type="submit">Request</button>
+			</form>
 			
 		</div>
 		
@@ -124,81 +186,122 @@
 		<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#popup">
             Launch demo modal
           </button> -->
-		
+		{% for i in searchQuery %}
+		{% if i.image %}
 		<!-- Modal pop-up -->
-		<div class="modal fade" id="popup" tabindex="-1" aria-labelledby="popupName" aria-hidden="true">
+		<div class="modal fade" id="popup{{i.id}}" tabindex="-1" aria-labelledby="popupName" aria-hidden="true">
 		  <div class="modal-dialog">
 			<div class="modal-content">
 			  <div class="modal-header">
-				<h5 class="modal-title" id="popupName">[ProduceName]</h5>
+				<h5 class="modal-title" id="popupName">{{ i.produce_name }}</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			  </div>
 			  <div class="modal-body">
 				  <div class="row">
 					  <div class="col">
-							  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-							<!-- <div class="carousel-indicators">
-							  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-							  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-							  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-							</div> -->
-							<div class="carousel-inner">
-							  <div class="carousel-item active">
-								<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-							  </div>
-							  <div class="carousel-item">
-								<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-							  </div>
-							  <div class="carousel-item">
-								<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-							  </div>
-							</div>
-							<button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-							  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							  <span class="visually-hidden">Previous</span>
-							</button>
-							<button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-							  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-							  <span class="visually-hidden">Next</span>
-							</button>
-						  </div>
+						<img class="bd-placeholder-img" width="100%" height="100%" src="{{ i.image.url }}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
 					  </div>
 					  <div class="col">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
-						  </div>
-					</div>
-				  <div class="row">
+							<p class="card-text">{{ i.weight }} lbs<br>{{ i.description }}</p>
+					  </div>
+					
+				  </div>
+				  <!-- <div class="row">
 						<p>[Description]</p>
-					</div>
+				  </div> -->
 			  </div>
 			  <div class="modal-footer">
-				<svg class="bd-placeholder-img rounded-circle" width="50" height="50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Profile Picture</title><rect width="100%" height="100%" fill="#777"/></svg>
+				<svg class="rounded-circle" width="50" height="50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false">
+					<title>Profile Picture</title>
+					<rect width="100%" height="100%" fill="#777"/>
+					<!-- <image href="{{i.owner.url}}" height="50" width="50"/>-->
+				</svg>
 				  
-				<p class="w-50">[Username]</p>
+				<p class="w-50">{{ i.owner.username }}</p>
 
 				<!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-				<button type="button" class="btn btn-primary">Send Message</button>
+				<form action='/createchat' method='POST'>
+					{% csrf_token %}
+					<input type="hidden" id="custId" name="user" value="{{ i.owner.id }}">
+					<button type="submit" class="btn btn-primary">Send Message</button>
+				</form>
 			  </div>
 			</div>
 		  </div>
 		</div>
+		{% endif %}
+		{% endfor %}
 		
+
 		
 		<!-- use Modal for pop-up when clicking on a post, use Cards for the content (picture with text) -->
-		<!-- Produce grid -->
+		<!-- Produce grid  -->
 		<div class="container d-grid">
-			<div class="row row-cols-auto">			
-				<div class="col-lg-4 col-md-4 col-sm-12">
-					<div class="card" data-bs-toggle="modal" data-bs-target="#popup">
-						<img src="./../static/img/column-1.jpg" class="card-image-top" alt = "" >
+			<div class="row">
+			{% for i in searchQuery %}	
+				<!-- FOR WANT TO RECIEVES  -->
+				{% if i.image %}
+				{% if forloop.counter|divisibleby:3 %}	
+				<div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+					<div class="card h-100 w-100" data-bs-toggle="modal" data-bs-target="#popup{{i.id}}" style="margin-bottom: 50px;">
+						<img class="card-image-top h-75 w-75 align-self-center align-items-stretch"  src="{{i.image.url}}" alt = "" >
 						<div class="card-body">
-							<p class="card-text">[ProduceName]<br>[Weight]<br>[Distance]</p>
+							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}</p>
 						</div>
 					</div>
 				</div>
-			</div> 
-		</div>
-		
+				{% if not forloop.last %}
+				
+				{% endif %}
+				{% else %}
+				<div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+					<div class="card h-100 w-100" data-bs-toggle="modal" data-bs-target="#popup{{i.id}}" style="margin-bottom: 50px;">
+						<img  class="card-image-top h-75 w-75 align-self-center align-items-stretch" src="{{i.image.url}}" class="card-image-top" alt = "" >
+						<div class="card-body">
+							<p class="card-text">{{ i.produce_name }}<br>{{ i.weight }}</p>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				
+				<!-- FOR WANT TO GIVES -->
+				{% else %}
+
+				<div class="container">
+				{% if forloop.first %}
+				<!-- please check syntax, intent is to only have this print at top (beginning of loop) -->
+                    <div class="row align-items-start">
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex">Produce</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex">Weight</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex">User</div>
+                    </div>
+				{% endif %}
+				{% if not forloop.counter|divisibleby:2 %}
+				<!-- each item is printed in a new row, with separated columns -->
+                    <div class="row align-items-start"  style="background-color: #9FCF86">
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.produce_name }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.weight }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.owner.username }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">
+                                   <button type="button" class="btn btn-primary btn-sm">Send Message</button>
+                        </div>
+                    </div>    
+       			{% else %}
+ 					<div class="row align-items-start">
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.produce_name }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.weight }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.owner.username }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">
+                                   <button type="button" class="btn btn-primary btn-sm">Send Message</button>
+                        </div>
+                    </div>  
+				{% endif %}  
+                </div>
+				{% endif %}
+				{% endfor %}	
+			</div>
+		</div> 
+
 		<!-- Footer -->
 		<footer class="page-footer">
 			<div class="container">

@@ -1,4 +1,5 @@
 from django.db import models
+import os
 
 
 # Create your models here.
@@ -10,7 +11,8 @@ class PublicUser(models.Model):
     verified = models.BooleanField(default=False)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    #image = models.ImageField(upload_to="profile_images", null=True)
+    image = models.ImageField(upload_to="profile_images", default="profile_images/default_profile.png")
+    # total_donated = models.FloatField(default=0)
 
     def __repr__(self):
         return str(self.__dict__)
@@ -23,7 +25,9 @@ class Produce(models.Model):
     veggies = models.BooleanField()
     owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
     date_created = models.DateField(auto_now_add=True)  # date time
-    image = models.ImageField(upload_to="produce_images", null=True)
+    image = models.ImageField(upload_to="produce_images", default="produce_images/default_produce.jpg")
+    description = models.TextField(null=True)
+    donated = models.BooleanField(default=False)
 
 
     def __repr__(self):
@@ -32,7 +36,6 @@ class Produce(models.Model):
 
 class Donation(models.Model):
     produce_id = models.ForeignKey(Produce, on_delete=models.CASCADE)  # foreign key
-    reciever = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
     date_created = models.DateField(auto_now_add=True)  # date time
 
     def __repr__(self):
@@ -41,30 +44,31 @@ class Donation(models.Model):
 
 class ProduceRequest(models.Model):
     produce_name = models.CharField(max_length=64)
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
-    user = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
+    weight = models.FloatField()
+    owner = models.ForeignKey(PublicUser, on_delete=models.CASCADE)  # foreign key
+    fruits = models.BooleanField()
+    veggies = models.BooleanField()
 
 # #message system
-# #TODO get chat working
-# class Chat(models.Model):
-#     user1 = models.ForeignKey(PublicUser, related_name='user1', on_delete=models.CASCADE)
-#     user2 = models.ForeignKey(PublicUser, related_name='user2', on_delete=models.CASCADE)
-#     messages = models.ManyToOneRel()
+#TODO get chat working
+class Chat(models.Model):
+    user1 = models.ForeignKey(PublicUser, related_name='user1', on_delete=models.CASCADE)
+    user2 = models.ForeignKey(PublicUser, related_name='user2', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['user1', 'user2']
+    
+    def __repr__(self):
+        return str(self.__dict__)
 
 
-# class Message(models.Model):
-#     userID = models.ForeignKey(PublicUser, related_name='sender', on_delete=models.CASCADE)
-#     chatID = models.ForeignKey(Chat)
-#     msg = models.TextField()
-#     dateTime = models.DateTimeField(auto_created=True)
+class Message(models.Model):
+    userID = models.ForeignKey(PublicUser, on_delete=models.CASCADE)
+    chatID = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    msg = models.TextField()
+    dateTime = models.DateTimeField(auto_now_add=True)
 
 
-#     def __repr__(self):
-#         return str(self.__dict__)
-
-# class Article(models.Model):
-#     title = models.CharField(max_length=64)
-#     date = models.DateField()  # set manually?
-#     author = models.CharField(max_length=64)
-#     content = models.TextField()
+    def __repr__(self):
+        return str(self.__dict__)
 
