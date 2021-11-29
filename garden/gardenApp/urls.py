@@ -21,6 +21,7 @@ urlpatterns = [
     path('request/<int:id>', views.editRequestPage, name='requestpage'),
     path('request/edit/<int:id>', views.editRequest, name='editRequest'),
     path('request/delete/<int:id>', views.deleteRequest, name='deleteRequest'),
+    path('chat/<int:id>', views.chat, name='chat'),
     # TEST URLS
     path('testmanagerequests', views.manageRequestPage, name='mrp'),
     path('testpostpage', views.createPostPage, name='cpp'),
@@ -33,7 +34,8 @@ urlpatterns = [
     path('donation/delete/<int:id>', views.deleteDonation, name='deletedonation'),
     path('messages', views.messages, name='messages'),
     path('createchat', views.createChat, name='createchat'),
-    path('createmessage', views.createMessage, name='createmessage')
+    path('createmessage', views.createMessage, name='createmessage'),
+    path(r'ajax/getMessages', views.getMessages, name='getMessages')
 
     # path('testhome', views.test_home, name='testhome'),
     # path('testlogin', views.test_login, name='testlogin'),

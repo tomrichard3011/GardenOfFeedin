@@ -85,7 +85,7 @@
 					<button class="btn btn-primary" type="submit">Search</button>
 	
 				<h class="align-self-center form-check form-switch">
-					{% if not recieving %}
+					{% if recieving %}
 					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="recieving" Checked>
 					{% else %}
 					<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="recieving">
@@ -198,12 +198,13 @@
 			  </div>
 			  <div class="modal-body">
 				  <div class="row">
-					  <div class="col">
-						<img class="bd-placeholder-img" width="100%" height="100%" src="{{ i.image.url }}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
-					  </div>
-					  <div class="col">
-							<p class="card-text">{{ i.weight }} lbs<br>{{ i.description }}</p>
-					  </div>
+					<div class="col">
+						<!-- <img src="{{i.image.url}}" alt="" class="rounded-circle user-in-modal"> -->
+						<img class="bd-placeholder-img" width="100%" height="100%" src="{{ i.image.url }}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/>
+					</div>
+					<div class="col">
+						<p class="card-text">{{ i.weight }} lbs<br>{{ i.description }}</p>
+					</div>
 					
 				  </div>
 				  <!-- <div class="row">
@@ -211,11 +212,11 @@
 				  </div> -->
 			  </div>
 			  <div class="modal-footer">
-				<svg class="rounded-circle" width="50" height="50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false">
+				<!-- <svg class="rounded-circle" width="50" height="50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profile Picture: 50x50" preserveAspectRatio="xMidYMid slice" focusable="false">
 					<title>Profile Picture</title>
 					<rect width="100%" height="100%" fill="#777"/>
-					<!-- <image href="{{i.owner.url}}" height="50" width="50"/>-->
-				</svg>
+				</svg> -->
+				<img src="{{i.owner.image.url}}" alt="" class="rounded-circle" width="50" height="50">
 				  
 				<p class="w-50">{{ i.owner.username }}</p>
 
@@ -281,7 +282,8 @@
                     <div class="row align-items-start"  style="background-color: #9FCF86">
                         <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.produce_name }}</div>
                         <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.weight }}</div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.owner.username }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">
+							<img src="{{i.owner.image.url}}" alt="" class="rounded-circle" width="25" height="25" style="margin-top:5px;">{{ i.owner.username }}</div>
                         <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">
                                    <button type="button" class="btn btn-primary btn-sm">Send Message</button>
                         </div>
@@ -290,7 +292,8 @@
  					<div class="row align-items-start">
                         <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.produce_name }}</div>
                         <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.weight }}</div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">{{ i.owner.username }}</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">
+							<img src="{{i.owner.image.url}}" alt="" class="rounded-circle" width="25" height="25" style="margin-top:5px;">{{ i.owner.username }}</div>
                         <div class="col-lg-3 col-md-3 col-sm-3 d-flex tablecontent">
                                    <button type="button" class="btn btn-primary btn-sm">Send Message</button>
                         </div>

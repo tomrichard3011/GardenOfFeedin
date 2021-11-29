@@ -4,6 +4,7 @@ from utils.Geo import *
 from utils.Authentication import *
 from utils import Search
 import datetime
+from django.http import JsonResponse
 
 def home(request):
     try:
@@ -264,18 +265,35 @@ def deleteDonation(request, id):
     return redirect('/landing')
 
 def messages(request):
-    user = PublicUser.objects.get(id=request.session['id'])
-    chats = Search.getAllChatsForUser(user)
+    # print(request.POST)
+    # chatID = request.POST.get('chatID')
+    currUser = PublicUser.objects.get(id=request.session['id'])
+    chats = Search.getAllChatsForUser(currUser)
+    context = {}
+    # allUserMsgs = []
+    # allmsgs = Search.getAllMessagesInChat(chatID)
+    # allUserMsgs.extend(allmsgs)
+    context['chats'] = chats
+    # context['allmsgs'] = allUserMsgs
+    context['user'] = currUser
+    # context['chatID'] = chatID
+    print(context)
+    return render(request,'messenger.html',context)
+
+def chat(request,id):
+    chatID = id
+    currUser = PublicUser.objects.get(id=request.session['id'])
+    chats = Search.getAllChatsForUser(currUser)
     context = {}
     allUserMsgs = []
-    for chat in chats:
-        allmsgs = Search.getAllMessagesInChat(chat)
-        allUserMsgs.extend(allmsgs)
-        
+    allmsgs = Search.getAllMessagesInChat(chatID)
+    allUserMsgs.extend(allmsgs)
     context['chats'] = chats
     context['allmsgs'] = allUserMsgs
+    context['user'] = currUser
+    context['chatID'] = chatID
     print(context)
-    return render(request,'test/testmessages.html',context)
+    return render(request,'messenger.html',context)
 
 def createChat(request):
     users = [
@@ -304,8 +322,7 @@ def createMessage(request):
         userID=user,
         msg=msg
     )
-
-    return redirect('/messages')
+    return redirect('/chat/{}'.format(chatID.id))
     
 def createRequestPage(request):
     return render(request,'createrequest.html',{})
@@ -382,6 +399,20 @@ def markAsDonated(request,id):
     Donation.objects.create(produce_id=produce)
 
     return redirect("/landing")
+
+
+
+# AJAX test?
+def getMessages(request):
+    chatID = request.GET.get('chatID')
+    allMsg = Search.getAllMessagesInChat(chat=chatID)
+
+    data = {
+        'all_messages' : allMsg
+    }
+
+    return JsonResponse(data)
+
 
 
 # # TEST METHODS

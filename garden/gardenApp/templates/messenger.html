@@ -68,53 +68,100 @@
 					<!-- list to hold all users -->
 					<div class="list-group chat-box users" style="margin-top: 15px;  list-style-type: none;">
 						<!-- TODO loop through all chats and populate the list -->
-						 <li class="person">
-							<div class="user">
-								<img src="./../static/img/column-1.jpg" alt="" class="rounded-circle">
-							</div>
-							<p class="chat-info">
-								<span class="name">[Name]</span>
-								<span class="time">[Time]<br></span>
-								<span class="last-chat">[Lastest chat, really long messages will be cut off]</span>
-							</p>
-                        </li>
+						{% for i in chats %}
+						
+						<!-- BUTTON FOR CHAT --> 
+						
+						<!-- <form action='/messages' method='POST'> -->
+							{% csrf_token %}
+							<!-- {% if user.username == i.user1.username %}
+							<input type='hidden' name="user" value={{i.user2.id}}>
+							{% else %}
+							<input type='hidden' name="user" value={{i.user1.id}}>
+							{% endif %} -->
+							<!-- <input type='hidden' name="chatID" value={{i.id}}> -->
+						
+							<!-- <button type='submit'> -->
+
+								<li class="person" style="padding:0px;">
+									<a href='/chat/{{i.id}}' style="margin:0px; display:block; width:100%; height:100%;  color: #2F2F2F; text-decoration: none;">
+									<div class="user">
+										{% if user.username == i.user1.username %}
+										<img src="{{i.user2.image.url}}" alt="" class="rounded-circle" style="margin-top: 15px;">
+										{% else %}
+										<img src="{{i.user1.image.url}}" alt="" class="rounded-circle" style="margin-top: 15px;">
+										{% endif %}
+									</div>
+									<p class="chat-info">
+										{% if user.username == i.user1.username %}
+										<span class="name">{{i.user2.username}}</span>
+										<!-- <span class="time">[Time]<br></span> -->
+										{% else %}
+										<span class="name">{{i.user1.username}}</span>
+										<!-- <span class="time">[Time]<br></span> -->
+										{% endif %}
+										<!-- <span class="last-chat">[Lastest chat, really long messages will be cut off]</span> -->
+									</p>
+									</a>
+								</li>
+                        
+						<!-- 	</button> -->
+						<!-- </form> -->
+				
+						
+						{% endfor %}
+					
+						<!-- END BUTTON -->
+
 						<!-- TODO end for loop here -->
 					</div>
 				</div>
 				
 				<!-- active chat  background-color: #E7F3E1 or white? -->
-				<div class="col-8 active-chat" style="background-color: #E7F3E">
+				<div class="col-8 active-chat" style="background-color: #E7F3E1">	
 					<!-- messages -->
 					<div class="message-box chat-container" style="margin-bottom: 5px;">
 						<!-- TODO: start forloop to populate the left and right chats accordingly (using if else to check if they belong to user?) -->
+						{% if allmsgs %}
+						{% for i in allmsgs %}
+						{% if i.userID.username != user.username %}
 						<li class="chat-left">
 							<div class="chat-avatar">
-								<img src="./../static/img/column-1.jpg" alt="">
-								<div class="chat-name">[Username of Other]</div>
+								<!-- <img src="./../static/img/column-1.jpg" alt=""> -->
+								<img src="{{i.userID.image.url}}">
+								<div class="chat-name">{{i.userID.username}}</div>
 							</div>
-							<div class="chat-text">[Message from Other User on Left]</div>
-							<div class="chat-hour">[Time of Message]</div>
+							<div class="chat-text">{{i.msg}}</div>
+							<div class="chat-hour">{{i.dateTime}}</div>
 						</li>
-						
+						{% else %}
 						<li class="chat-right">
-							<div class="chat-hour">[Time of Message]</div>
-							<div class="chat-text">[Message from Current User on Right]</div>
+							<div class="chat-hour">{{i.dateTime}}</div>
+							<div class="chat-text">{{i.msg}}</div>
 							<div class="chat-avatar">
-								<img src="./../static/img/column-1.jpg" alt="">
-								<div class="chat-name">[Username of User]</div>
+								<!-- <img src="./../static/img/column-1.jpg" alt=""> -->
+								<img src="{{i.userID.image.url}}">
+								<div class="chat-name">{{i.userID.username}}</div>
 							</div>
 						</li>
-						<!-- TODO: end for loop here -->
+						{% endif %}
+						{% endfor %}
+						{% endif %}
+						
 					</div>
 					
+					
 					<!-- user input -->
+					{% if allmsgs %}
 					<div class="row g-3">
-						<div class="form-group mt-3 mb-0">
-							<textarea class="form-control" rows="2" placeholder="Type your message here..." style="margin-bottom: 10px; resize: none;"></textarea>
+						<form class="form-group mt-3 mb-0" action='/createmessage' method='POST'>
+							{% csrf_token %}
+							<input type='hidden' name='chatID' value={{chatID}}>
+							<textarea class="form-control" rows="2" name='msg' placeholder="Type your message here..." style="margin-bottom: 10px; resize: none;"></textarea>
 							<button class="btn btn-primary btn-sm" type="submit">Send</button>
-						</div>
+						</from>
 					</div>
-					 
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -127,7 +174,7 @@
 		<footer class="page-footer" style="background-color: #222; color: #ccc; margin-top:0px; padding:0px 0 0px">
 			<div class="container">
 				<div class="row">
-			<!--		<div class="col-lg-8 col-md-8 col-sm-12">
+			<!-		<div class="col-lg-8 col-md-8 col-sm-12">
 						<h6 class="text-uppercase font-weight-bold">Additional Information</h6>
 						<p>Disclaimers: ...</p>
 						<p>... [Add link to a Privacy Policy and ToS?]</p>
