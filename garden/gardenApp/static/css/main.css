@@ -76,11 +76,16 @@ body {
 }
 .description h1 {
 	color: #6ab446;
+	
+	font-stretch: normal;
+	font-size-adjust: auto;
 }
 .description p {
 	color: #fff;
-	font-size: 1.3rem;
+	font-size: 2.0vw;
 	line-height: 1.5;
+	font-stretch: expanded;
+	font-size-adjust: auto;
 }
 .description button {
     border:1px solid #9FCF86;
@@ -125,12 +130,17 @@ body {
 .page-footer {
     background-color: #222;
     color: #ccc;
+/*
     padding: 60px 0 30px;
 	margin-top: 15px;
+*/
+	margin-top:0px; 
+	padding:10px 0 5px
 }
 .footer-copyright {
     color: #666;
-    padding: 40px 0;
+	padding: 10px 0;
+/*  padding: 10px 0;*/
 }
 
 /* WELCOME */
@@ -182,15 +192,17 @@ input[type="file"] {
 .custom-file-upload {
     border: 1px solid #ccc;
 	border-radius: 5px;
-    display: inline-block;
+    display: inline-flex;
     padding: 6px 12px;
     cursor: pointer;
+	
+	text-align: center; 
 }
 .custom-file-upload:hover {
     border: 1px solid #ccc;
 	border-radius: 5px;
 	background-color: #6AB446;
-    display: inline-block;
+    display: inline-flex;
     padding: 6px 12px;
     cursor: pointer;
 }

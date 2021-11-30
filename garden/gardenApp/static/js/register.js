@@ -31,5 +31,5 @@
 //        $('.form-register :submit').prop('disabled',!my_condition);
 //    });
 //});
-
-
+//
+//
