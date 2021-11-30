@@ -51,19 +51,19 @@
 			<h1 class="h3 mb-3 fw-normal">Registration</h1>
 			  <p>Please enter your information to create an account.</p>
 			  <div class="form-floating">
-				<input type="username" class="form-control" id="floatingInput" placeholder="username" name="username">
+				<input type="username" class="form-control required" id="username" placeholder="username" name="username" required>
 				<label for="username">Username</label>
 			  </div>
 			<div class="form-floating">
-			  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email">
+			  <input type="email" class="form-control required email" id="email" placeholder="name@example.com" name="email" required>
 			  <label for="email">Email</label>
 			</div>
 			<div class="form-floating">
-			  <input type="address" class="form-control" id="floatingAddress" placeholder="123 Main Street, City, CA" name="address">
+			  <input type="address" class="form-control required" id="address" placeholder="123 Main Street, City, CA" name="address" required>
 			  <label for="address">Address</label>
 			</div>
 			<div class="form-floating">
-			  <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+			  <input type="password" class="form-control required" id="password" placeholder="Password" name="password" required>
 			  <label for="password">Password</label>
 			</div>
 			<br>
@@ -90,7 +90,10 @@
 			  <label class="form-check-label" for="flexSwitchCheckDefault">Registering as a corporation</label>
 			</h> -->
 			  
-			<button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+			 <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+			  
+<!--			<input class="w-100 btn btn-lg btn-primary" id="register" type="submit"/>-->
+			  
 			  
 			<div class="container signin">
     			<p>Already have an account? <a href="/signin">Sign in</a>.</p>
@@ -121,7 +124,9 @@
 
 	
 	<!-- custom javascript files -->
-	<script src="static/js/main.js"></script>	
+	<script src="./../static/js/main.js"></script>	
+	<script src="./../static/js/register.js"></script>	
+	<script src="./../static/js/misc_login_function.js"></script>
 	<!-- includes every Bootstrap JavaScript plugin and dependency with Popper -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>

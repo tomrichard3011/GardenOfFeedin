@@ -46,6 +46,11 @@ body {
     background:#fff;
     color:#6ab446;
 }
+.btn-primary:disabled {
+	border:1px solid #6ab446;
+    background:#fff;
+    color:#A1AE9A;
+}
 
 /* HEADER */
 .header {
@@ -166,6 +171,28 @@ body {
 .tablecontent {
 	margin-top: 15px; 
 	margin-bottom: 0px;
+}
+
+/* For uploading a new profile picture in Profile 
+source: (https://qawithexperts.com/article/css/styling-input-typefile-button-using-css-bootstrap/89) */
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+	border-radius: 5px;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.custom-file-upload:hover {
+    border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #6AB446;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
 }
 
 /* User profile in modal */
