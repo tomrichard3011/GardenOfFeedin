@@ -85,17 +85,45 @@
 			<form action = "/changeProfileImage" method="POST" enctype='multipart/form-data'>
 				{% csrf_token %}
 		
-				<label class="align-self-center" for="image">Select a file:</label>
-				<input type="file" id="myfile" name="image" accept="image/*">
+				<label class="custom-file-upload" for="image">Choose File</label>
+				<input class="align-self-center" type="file" id="myfile" name="image" accept="image/*">
 				<br>
 
 				<button class="w-50 btn btn-lg btn-primary" type="submit">Change profile picture</button>
 			</form>
 			
-			{% for i in donations %}
-				<h1 class="h3 mb-3 fw-normal">{{ i.produce_name }}</h1>
+			<!-- dontation list -->
+			<h1>Donation List</h1>
+			<div class="container" style="margin-top:15px;">
+				<div class="row align-items-start">
+					<div class="col-lg-4 col-md-4 col-sm-4 d-flex">Produce</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 d-flex">Weight</div>
+				</div>
+				<!-- TODO start for loop here -->
+				{% for i in donations %}
+				<!-- each item is printed in a new row, with separated columns -->
+				{% if not forloop.counter|divisibleby:2 %}
+				<div class="row align-items-start" style="background-color: #9FCF86">
+					<div class="col-lg-4 col-md-4 col-sm-4 d-flex tablecontent">{{ i.produce_name }}</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 d-flex tablecontent">{{ i.weight }}</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 tablecontent" >
+						<img src="{{i.image.url}}" alt="" style="margin-bottom: 15px; display: block; height: 50px; width: auto;">
+					</div>
+				</div>
+				{% else %}
+				<!-- color every other row-->
+				<div class="row align-items-start">
+					<div class="col-lg-4 col-md-4 col-sm-4 d-flex tablecontent">{{ i.produce_name }}</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 d-flex tablecontent">{{ i.weight }}</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 tablecontent">
+						<img src="{{i.image.url}}" alt="" style="margin-bottom: 15px; display: block; height: 50px; width: auto;">
+					</div>
+				</div>
+				{% endif %}
 			{% endfor %}
-			
+			<!-- end for loop at the end of the table, before container div -->
+			</div>
+
 			
 		</main>
 
