@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Post</title>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<!-- Navbar -->
 	
 	<nav class="navbar navbar-expand-md">
@@ -88,14 +88,16 @@
 
 				</div>
 			</div>
-			  <div class="row">
-				   <!-- Add image selector -->
-					<label style="margin-left: 25px;" for="image">Select a file:</label>
-					<input style="margin-right: 150px;" type="file" id="myfile" name="image" accept="image/*">
-				  
-					<label for="description">Description (optional):</label><br>
-					<input class="form-control me-2 w-75" type="text" id="desc" name="description" placeholder="{{prod.description}}"><br>
-				</div>
+			<div class="flex-column" style="margin-top: 15px;">
+			   <!-- Add image selector -->
+				<label class="custom-file-upload" style="margin-left: 25px; text-align: center" for="myfile">Choose a file</label>
+				<span id="file-selected" style="display: inline-flex">No file selected</span>
+				<input style="margin-right: 150px;" type="file" id="myfile" name="image" accept="image/*">
+			</div>
+			<div class="row">
+				<label for="description">Description (optional):</label><br>
+				<input class="form-control me-2 w-75" type="text" id="desc" name="description" placeholder="{{prod.description}}"><br>
+			</div>
 			  
 		<button type="submit" class="btn btn-primary">Save edits</button>
 		<a href='/donation/delete/{{prod.id}}'><button type="button" class="btn btn-primary">Delete post</button></a>
@@ -105,15 +107,16 @@
 		</div>
 	
 	
-	<!-- Footer -->
-		<footer class="page-footer">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8 col-md-8 col-sm-12">
-						<h6 class="text-uppercase font-weight-bold">Additional Information</h6>
-						<p>Disclaimers: ...</p>
-						<p>... [Add link to a Privacy Policy and ToS?]</p>
-					</div>
+		<!-- Footer -->
+<!--
+	<footer class="page-footer mt-auto">
+		<div class="container">
+		  <div class="row">
+				<div class="col-lg-8 col-md-8 col-sm-12">
+					<h6 class="text-uppercase font-weight-bold">Additional Information</h6>
+					<p>Disclaimers: ...</p>
+					<p>... [Add link to a Privacy Policy and ToS?]</p>
+				</div>
 				<div class="col-lg-4 col-md-4 col-sm-12">
 					<h6 class="text-uppercase font-weight-bold">Contact</h6>
 					<p>1 Washington Sq, San Jose, California
@@ -121,13 +124,18 @@
 					<br/>+ 01 234 567 88
 					<br/>+ 01 234 567 89</p>
 				</div>
-					<div class="footer-copyright text-center">© 2021 Copyright: GardenOfFeedin.com</div>
-				</div>
 			</div>
-		</footer>
+		<div class="footer-copyright text-center">© 2021 Copyright: GardenOfFeedin.com</div>
+			</div>
+	</footer> 
+-->
+	<footer class="page-footer mt-auto">
+		<div class="footer-copyright text-center">© 2021 Copyright: GardenOfFeedin.com</div>	
+	</footer> 
 	
 	<!-- includes every Bootstrap JavaScript plugin and dependency with Popper -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	<!-- custom javascript files -->
 	<script src="./../static/js/main.js"></script>
 </body>
