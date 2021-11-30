@@ -56,21 +56,38 @@
 		<form class="d-flex align-content-end flex-wrap" action = "/testpost" method="POST" enctype='multipart/form-data'>
 			{% csrf_token %}
 			<label for="name">Produce name:</label><br>
-			<input class="form-control me-2 w-150" type="text" id="1" name="name"><br>
-			<label for="weight">Weight:</label><br>
-			<input class="form-control me-2 w-150" type="float" id="2" name="weight"><br>
-			<input type="radio" class="btn-check" id="3" name="type" value="fruit"  autocomplete="off">
-			<label class="align-self-end w-25 btn btn-outline-success" for="3">Fruit</label><br>
-			<input type="radio" class="btn-check" id="4" name="type" value="veg"  autocomplete="off">
-			<label class="align-self-end w-25 btn btn-outline-success" for="4">Vegetable</label><br>
+			<input class="form-control me-2 w-150" type="text" id="1" name="name" required><br>
 			
+			<label for="weight">Weight:</label><br>
+			<input class="form-control me-2 w-150" type="number" id="2" name="weight" step="0.01" required><br>
+			
+			<div class="row w-100 flex-wrap" >
+				<div class="col-6">
+					<input type="radio" class="btn-check" id="3" name="type" value="fruit" autocomplete="off" style="vertical-align: middle; margin: 0px;" required>
+					<label class="align-self-end w-100 btn btn-outline-success" for="3">Fruit</label><br>
+				</div>
+				<div class="col-6">
+					<input type="radio" class="btn-check" id="4" name="type" value="veg" autocomplete="off" style="vertical-align: middle; margin: 0px;" required>
+					<label class="align-self-end w-100 btn btn-outline-success" for="4">Vegetable</label><br>
+				</div>
+			</div>			
 
-			<label style="margin-left: 25px;" for="image">Select a file:</label>
+<!--
+		 	<label style="margin-left: 25px;" for="myfile">Select a file:</label>
 			<input style="margin-right: 150px;" type="file" id="myfile" name="image" accept="image/*">
 			<br>
+-->
+			<div  class="row w-15">
+				<label class="custom-file-upload" for="myfile">Choose a File</label>
+				<input type="file" id="myfile" name="image" accept="image/*"><br>
+			</div>
 			
-			<label for="description">Description (optional):</label><br>
-			<input class="form-control me-2 w-150" type="text" id="5" name="description"><br>
+			<div  class="row w-100">
+				<label for="description">Description (optional):</label>
+				<input class="form-control me-2 w-150" type="text" id="5" name="description"><br>
+			</div>
+			
+			
 			
 			<input class="w-100 btn btn-lg btn-primary" type="submit" value="Submit">
 		</form>
